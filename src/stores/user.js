@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
     nickname: '铲屎官',
     avatar: '',
     status: 'enjoying', // enjoying, seeking, chill, taken
-    startDate: dayjs().subtract(30, 'day').toISOString(), // 默认单身30天
+    startDate: null, // 初始为 null，在 initUser 时设置
     settings: {
       notifications: true,
       soundEnabled: true,
@@ -41,6 +41,10 @@ export const useUserStore = defineStore('user', {
       const saved = await loadFromStorage('user')
       if (saved) {
         this.$patch(saved)
+      } else {
+        // 首次使用，设置默认 startDate 并保存
+        this.startDate = dayjs().subtract(30, 'day').toISOString()
+        saveToStorage('user', this.$state)
       }
     },
 

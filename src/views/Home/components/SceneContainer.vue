@@ -36,11 +36,11 @@
       <!-- 计时器卡片 -->
       <div class="timer-card animate-fade-in-up">
         <div class="timer-label">单身时长</div>
-        <div class="timer-display">{{ timerStore.timeString }}</div>
+        <div class="timer-display">{{ timeString }}</div>
         <div class="timer-stats">
           <div class="stat-item">
             <span class="stat-icon">🎯</span>
-            <span class="stat-text">{{ userStore.singleDays }}天</span>
+            <span class="stat-text">{{ singleDays }}天</span>
           </div>
           <div class="stat-item">
             <span class="stat-icon">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
@@ -112,6 +112,7 @@ import { useUserStore } from "@/stores/user";
 import { useTimerStore } from "@/stores/timer";
 import { useDogStore } from "@/stores/dog";
 import { useCurrencyStore } from "@/stores/currency";
+import dayjs from "dayjs";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -122,6 +123,45 @@ const currencyStore = useCurrencyStore();
 // 场景状态
 const isDay = ref(true);
 const showHeart = ref(false);
+
+// 用于强制更新的响应式变量
+const timerKey = ref(0);
+
+// 直接在组件中计算单身时长，确保实时更新
+const singleDays = computed(() => {
+  // 依赖 timerKey 以确保每秒都重新计算
+  timerKey.value;
+  if (!userStore.startDate) return 0;
+  return dayjs().diff(dayjs(userStore.startDate), 'day');
+});
+
+const timeString = computed(() => {
+  // 依赖 timerKey 以确保每秒都重新计算
+  timerKey.value;
+  if (!userStore.startDate) return '0天0小时0分0秒';
+
+  const start = dayjs(userStore.startDate);
+  const now = dayjs();
+
+  const years = now.diff(start, 'year');
+  const months = now.diff(start, 'month') % 12;
+  const days = now.diff(start, 'day') % 30;
+  const hours = now.diff(start, 'hour') % 24;
+  const minutes = now.diff(start, 'minute') % 60;
+  const seconds = now.diff(start, 'second') % 60;
+
+  let result = [];
+  if (years > 0) result.push(`${years}年`);
+  if (months > 0) result.push(`${months}个月`);
+  if (days > 0) result.push(`${days}天`);
+  if (years === 0) {
+    result.push(`${hours}小时`);
+    result.push(`${minutes}分`);
+    result.push(`${seconds}秒`);
+  }
+
+  return result.length > 0 ? result.join('') : '0天0小时0分0秒';
+});
 
 // 计算属性
 const sceneClass = computed(() => {
@@ -184,6 +224,7 @@ let timerInterval = null;
 onMounted(() => {
   // 每秒更新计时器
   timerInterval = setInterval(() => {
+    timerKey.value++; // 强制触发响应式更新
     timerStore.checkMilestones();
   }, 1000);
 });
