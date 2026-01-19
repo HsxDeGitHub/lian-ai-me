@@ -68,7 +68,10 @@
       </div>
     </div>
 
-    <TabBar />
+    <!-- 底部导航 -->
+    <div class="tab-bar-wrapper">
+      <TabBar />
+    </div>
   </div>
 </template>
 
@@ -79,7 +82,12 @@ import { useCommunityStore } from '@/stores/community'
 import { MOODS } from '@/data/moods'
 import { useAchievementStore } from '@/stores/achievements'
 import dayjs from 'dayjs'
-import { useTimerStore } from '@/stores/timer'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+
+// 启用相对时间插件
+dayjs.extend(relativeTime)
+dayjs.locale('zh-cn')
 
 const communityStore = useCommunityStore()
 const achievementStore = useAchievementStore()
@@ -327,5 +335,14 @@ onMounted(async () => {
 .publish-btn {
   background: var(--color-primary);
   color: white;
+}
+
+/* 固定底部导航栏 */
+.tab-bar-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
 }
 </style>
