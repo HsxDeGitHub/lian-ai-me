@@ -70,7 +70,10 @@
       </div>
     </div>
 
-    <TabBar />
+    <!-- 底部导航 -->
+    <div class="tab-bar-wrapper">
+      <TabBar />
+    </div>
   </div>
 </template>
 
@@ -341,5 +344,14 @@ onMounted(async () => {
 .save-btn {
   background: var(--color-primary);
   color: white;
+}
+
+/* 固定底部导航栏 */
+.tab-bar-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
 }
 </style>

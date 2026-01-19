@@ -9,6 +9,14 @@
         <div class="cloud cloud-2"></div>
         <div class="cloud cloud-3"></div>
       </div>
+      <!-- 可爱装饰元素 -->
+      <div class="cute-decorations">
+        <span class="deco-heart deco-1">💕</span>
+        <span class="deco-paw deco-2">🐾</span>
+        <span class="deco-star deco-3">✨</span>
+        <span class="deco-heart deco-4">💖</span>
+        <span class="deco-star deco-5">⭐</span>
+      </div>
     </div>
 
     <!-- 主内容区域 -->
@@ -22,9 +30,7 @@
         </div>
 
         <!-- 设置按钮 -->
-        <router-link to="/profile" class="settings-btn">
-          ⚙️
-        </router-link>
+        <router-link to="/profile" class="settings-btn"> ⚙️ </router-link>
       </div>
 
       <!-- 计时器卡片 -->
@@ -37,7 +43,7 @@
             <span class="stat-text">{{ userStore.singleDays }}天</span>
           </div>
           <div class="stat-item">
-            <span class="stat-icon">{{ dogStore.dogInfo?.icon || '🐕' }}</span>
+            <span class="stat-icon">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
             <span class="stat-text">{{ dogStore.name }}</span>
           </div>
         </div>
@@ -59,8 +65,11 @@
           :class="dogAnimationClass"
           @click="interactWithDog"
         >
-          <div class="dog-emoji">{{ dogStore.dogInfo?.emoji || '🐶' }}</div>
-          <div class="dog-mood-indicator" :style="{ backgroundColor: dogStore.moodInfo?.color }"></div>
+          <div class="dog-emoji">{{ dogStore.dogInfo?.emoji || "🐶" }}</div>
+          <div
+            class="dog-mood-indicator"
+            :style="{ backgroundColor: dogStore.moodInfo?.color }"
+          ></div>
           <!-- 心形效果 -->
           <div class="heart-float" v-if="showHeart">💕</div>
         </div>
@@ -68,7 +77,10 @@
         <!-- 狗狗状态 -->
         <div class="dog-status">
           <div class="energy-bar">
-            <div class="energy-fill" :style="{ width: dogStore.energy + '%' }"></div>
+            <div
+              class="energy-fill"
+              :style="{ width: dogStore.energy + '%' }"
+            ></div>
           </div>
           <div class="status-text">{{ moodText }}</div>
         </div>
@@ -94,93 +106,93 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import { useTimerStore } from '@/stores/timer'
-import { useDogStore } from '@/stores/dog'
-import { useCurrencyStore } from '@/stores/currency'
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+import { useTimerStore } from "@/stores/timer";
+import { useDogStore } from "@/stores/dog";
+import { useCurrencyStore } from "@/stores/currency";
 
-const router = useRouter()
-const userStore = useUserStore()
-const timerStore = useTimerStore()
-const dogStore = useDogStore()
-const currencyStore = useCurrencyStore()
+const router = useRouter();
+const userStore = useUserStore();
+const timerStore = useTimerStore();
+const dogStore = useDogStore();
+const currencyStore = useCurrencyStore();
 
 // 场景状态
-const isDay = ref(true)
-const showHeart = ref(false)
+const isDay = ref(true);
+const showHeart = ref(false);
 
 // 计算属性
 const sceneClass = computed(() => {
-  const hour = new Date().getHours()
-  isDay.value = hour >= 6 && hour < 18
-  return isDay.value ? 'day-scene' : 'night-scene'
-})
+  const hour = new Date().getHours();
+  isDay.value = hour >= 6 && hour < 18;
+  return isDay.value ? "day-scene" : "night-scene";
+});
 
 const dogAnimationClass = computed(() => {
   const animations = {
-    happy: 'animate-tail-wag',
-    excited: 'animate-jump',
-    calm: 'animate-breathe',
-    sad: '',
-    bored: '',
-    sleepy: 'animate-breathe'
-  }
-  return animations[dogStore.mood] || 'animate-breathe'
-})
+    happy: "animate-tail-wag",
+    excited: "animate-jump",
+    calm: "animate-breathe",
+    sad: "",
+    bored: "",
+    sleepy: "animate-breathe",
+  };
+  return animations[dogStore.mood] || "animate-breathe";
+});
 
 const moodText = computed(() => {
   const moodTexts = {
-    happy: '很开心',
-    excited: '超兴奋',
-    calm: '很平静',
-    sad: '有点难过',
-    bored: '有点无聊',
-    sleepy: '想睡觉',
-    proud: '很自豪',
-    grateful: '很感恩'
-  }
-  return moodTexts[dogStore.mood] || '心情不错'
-})
+    happy: "很开心",
+    excited: "超兴奋",
+    calm: "很平静",
+    sad: "有点难过",
+    bored: "有点无聊",
+    sleepy: "想睡觉",
+    proud: "很自豪",
+    grateful: "很感恩",
+  };
+  return moodTexts[dogStore.mood] || "心情不错";
+});
 
 // 方法
 const interactWithDog = () => {
-  dogStore.interact('pet')
+  dogStore.interact("pet");
   // 显示心形效果
-  showHeart.value = true
+  showHeart.value = true;
   setTimeout(() => {
-    showHeart.value = false
-  }, 1000)
-}
+    showHeart.value = false;
+  }, 1000);
+};
 
 const openDiary = () => {
-  router.push('/diary')
-}
+  router.push("/diary");
+};
 
 const goToTasks = () => {
-  router.push('/tasks')
-}
+  router.push("/tasks");
+};
 
 const goToShop = () => {
-  router.push('/shop')
-}
+  router.push("/shop");
+};
 
 // 定时更新
-let timerInterval = null
+let timerInterval = null;
 
 onMounted(() => {
   // 每秒更新计时器
   timerInterval = setInterval(() => {
-    timerStore.checkMilestones()
-  }, 1000)
-})
+    timerStore.checkMilestones();
+  }, 1000);
+});
 
 onUnmounted(() => {
   if (timerInterval) {
-    clearInterval(timerInterval)
+    clearInterval(timerInterval);
   }
-})
+});
 </script>
 
 <style scoped>
@@ -192,11 +204,17 @@ onUnmounted(() => {
 }
 
 .scene-container.day-scene {
-  background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+  background: linear-gradient(
+    180deg,
+    #ffe5ec 0%,
+    #fff0f5 30%,
+    #e8f4fd 60%,
+    #d4f1f9 100%
+  );
 }
 
 .scene-container.night-scene {
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(180deg, #2d1b4e 0%, #1a1a2e 50%, #0f0f1a 100%);
 }
 
 /* 背景装饰 */
@@ -209,25 +227,100 @@ onUnmounted(() => {
 
 .sun {
   position: absolute;
-  top: 50px;
-  right: 50px;
-  width: 80px;
-  height: 80px;
-  background: #FFD93D;
+  top: 40px;
+  right: 40px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #ffe066, #ffb347);
   border-radius: 50%;
-  box-shadow: 0 0 60px rgba(255, 217, 61, 0.6);
-  animation: breathe 3s ease-in-out infinite;
+  box-shadow: 0 0 80px rgba(255, 217, 61, 0.5),
+    0 0 120px rgba(255, 179, 71, 0.3);
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+.sun::before {
+  content: "☀️";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
 }
 
 .moon {
   position: absolute;
-  top: 50px;
-  right: 50px;
-  width: 60px;
-  height: 60px;
-  background: #F5F5F5;
+  top: 40px;
+  right: 40px;
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(135deg, #fffacd, #f5f5f5);
   border-radius: 50%;
-  box-shadow: 0 0 40px rgba(245, 245, 245, 0.4);
+  box-shadow: 0 0 60px rgba(255, 250, 205, 0.5),
+    0 0 100px rgba(245, 245, 245, 0.3);
+}
+
+.moon::before {
+  content: "🌙";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 35px;
+}
+
+/* 可爱装饰元素 */
+.cute-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cute-decorations span {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0.6;
+  animation: float-up 8s ease-in-out infinite;
+}
+
+.deco-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.deco-2 {
+  top: 60%;
+  left: 5%;
+  animation-delay: 2s;
+  font-size: 18px;
+}
+.deco-3 {
+  top: 30%;
+  right: 15%;
+  animation-delay: 1s;
+}
+.deco-4 {
+  top: 70%;
+  right: 10%;
+  animation-delay: 3s;
+  font-size: 20px;
+}
+.deco-5 {
+  top: 15%;
+  left: 30%;
+  animation-delay: 4s;
+  font-size: 16px;
+}
+
+@keyframes float-up {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-15px) rotate(10deg);
+    opacity: 0.7;
+  }
 }
 
 .clouds {
@@ -297,74 +390,137 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  background: var(--color-bg-card);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-cute);
+  border: 2px solid rgba(255, 182, 193, 0.3);
+  transition: all var(--transition-base);
+}
+
+.currency-display:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow);
 }
 
 .coin-icon {
   font-size: var(--font-xl);
+  animation: wiggle 2s ease-in-out infinite;
 }
 
 .coin-amount {
   font-size: var(--font-lg);
   font-weight: var(--font-bold);
-  color: var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-cute-pink)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .settings-btn {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-card);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   border-radius: var(--radius-full);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-cute);
+  border: 2px solid rgba(255, 182, 193, 0.3);
   font-size: var(--font-xl);
   text-decoration: none;
-  transition: transform var(--transition-base);
+  transition: all var(--transition-bounce);
 }
 
 .settings-btn:hover {
-  transform: rotate(45deg);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: var(--shadow-glow);
 }
 
 /* 计时器卡片 */
 .timer-card {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-xl);
-  padding: var(--space-xl);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl) var(--space-lg);
   margin-bottom: var(--space-xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-cute);
   text-align: center;
+  border: 2px solid rgba(255, 182, 193, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 182, 193, 0.1),
+    transparent
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
 }
 
 .timer-label {
   font-size: var(--font-sm);
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 2px;
+  position: relative;
 }
 
 .timer-display {
-  font-size: var(--font-3xl);
+  font-size: clamp(24px, 6vw, 36px);
   font-weight: var(--font-bold);
-  color: var(--color-primary);
-  margin-bottom: var(--space-lg);
-  line-height: 1.2;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-cute-pink-dark),
+    var(--color-primary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-md);
+  line-height: 1.3;
+  position: relative;
 }
 
 .timer-stats {
   display: flex;
   justify-content: center;
   gap: var(--space-lg);
+  flex-wrap: wrap;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+  background: rgba(255, 182, 193, 0.15);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
 }
 
 .stat-icon {
@@ -373,8 +529,8 @@ onUnmounted(() => {
 
 .stat-text {
   font-size: var(--font-sm);
-  font-weight: var(--font-medium);
-  color: var(--color-text-secondary);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
 }
 
 /* 狗狗场景 */
@@ -398,7 +554,7 @@ onUnmounted(() => {
 }
 
 .house-body {
-  background: #D4A574;
+  background: #d4a574;
   width: 150px;
   height: 100px;
   margin: 0 auto;
@@ -413,7 +569,7 @@ onUnmounted(() => {
   transform: translateX(-50%);
   width: 50px;
   height: 70px;
-  background: #8B4513;
+  background: #8b4513;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
@@ -466,7 +622,7 @@ onUnmounted(() => {
 
 /* 可爱眨眼动画 */
 .dog-emoji::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 30%;
   left: 50%;
@@ -479,7 +635,8 @@ onUnmounted(() => {
 }
 
 @keyframes cute-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
   50% {
@@ -488,7 +645,10 @@ onUnmounted(() => {
 }
 
 @keyframes blink {
-  0%, 45%, 55%, 100% {
+  0%,
+  45%,
+  55%,
+  100% {
     transform: translateX(-50%) scaleY(1);
     opacity: 1;
   }
@@ -526,7 +686,7 @@ onUnmounted(() => {
 
 .energy-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6BCB77, #FFD93D);
+  background: linear-gradient(90deg, #6bcb77, #ffd93d);
   transition: width 0.3s ease;
 }
 
@@ -547,31 +707,109 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-lg);
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  border: none;
+  padding: var(--space-lg) var(--space-md);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  border: 2px solid rgba(255, 182, 193, 0.25);
   cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-base);
+  box-shadow: var(--shadow-cute);
+  transition: all var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.action-btn:hover::before {
+  left: 100%;
 }
 
 .action-btn:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: var(--shadow-lg);
+  border-color: var(--color-cute-pink);
 }
 
 .action-btn:active {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(0.98);
 }
 
 .action-icon {
-  font-size: var(--font-3xl);
+  font-size: 36px;
+  transition: transform var(--transition-base);
+}
+
+.action-btn:hover .action-icon {
+  animation: wiggle 0.5s ease-in-out;
 }
 
 .action-label {
   font-size: var(--font-sm);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   color: var(--color-text-primary);
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .scene-content {
+    padding: var(--space-md);
+    padding-bottom: 100px;
+  }
+
+  .timer-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .timer-display {
+    font-size: 24px;
+  }
+
+  .quick-actions {
+    gap: var(--space-sm);
+  }
+
+  .action-btn {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .action-icon {
+    font-size: 28px;
+  }
+
+  .action-label {
+    font-size: var(--font-xs);
+  }
+
+  .dog-emoji {
+    font-size: 90px;
+  }
+
+  .dog-scene {
+    height: 240px;
+  }
+
+  .house-roof {
+    font-size: 60px;
+  }
+
+  .house-body {
+    width: 120px;
+    height: 80px;
+  }
 }
 </style>

@@ -1,4 +1,4 @@
-/* 基础样式 */
+/* 基础样式 - 可爱风格 */
 
 #app {
   min-height: 100vh;
@@ -21,84 +21,88 @@
   padding: 0 var(--space-md);
 }
 
-/* 卡片 */
+/* 卡片 - 玻璃态 */
 .card {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   padding: var(--space-lg);
-  transition: box-shadow var(--transition-base);
+  border: 1px solid rgba(255, 182, 193, 0.2);
+  transition: all var(--transition-base);
 }
 
 .card:hover {
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
-/* 按钮 */
+.card:active {
+  transform: translateY(0);
+}
+
+/* 按钮 - 可爱风格 */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-md);
-  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
   transition: all var(--transition-base);
   cursor: pointer;
   user-select: none;
+  min-height: 44px;
+  min-width: 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.btn:active::after {
+  width: 200px;
+  height: 200px;
 }
 
 .btn-primary {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
   color: white;
+  box-shadow: 0 4px 15px rgba(255, 140, 66, 0.3);
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dark);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
-  background: var(--color-secondary);
+  background: linear-gradient(135deg, var(--color-secondary-light), var(--color-secondary));
   color: white;
+  box-shadow: 0 4px 15px rgba(107, 203, 119, 0.3);
 }
 
 .btn-secondary:hover {
-  background: var(--color-secondary-dark);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
-}
-
-.btn-outline:hover {
-  background: var(--color-primary);
-  color: white;
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--color-text-primary);
-}
-
-.btn-ghost:hover {
-  background: var(--color-bg-secondary);
-}
-
-/* 输入框 */
-.input {
-  width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: var(--font-md);
-  transition: border-color var(--transition-base);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* 文本 */
@@ -161,26 +165,77 @@
 }
 
 /* 间距 */
-.mt-xs { margin-top: var(--space-xs); }
-.mt-sm { margin-top: var(--space-sm); }
-.mt-md { margin-top: var(--space-md); }
-.mt-lg { margin-top: var(--space-lg); }
-.mt-xl { margin-top: var(--space-xl); }
-.mt-2xl { margin-top: var(--space-2xl); }
+.mt-xs {
+  margin-top: var(--space-xs);
+}
 
-.mb-xs { margin-bottom: var(--space-xs); }
-.mb-sm { margin-bottom: var(--space-sm); }
-.mb-md { margin-bottom: var(--space-md); }
-.mb-lg { margin-bottom: var(--space-lg); }
-.mb-xl { margin-bottom: var(--space-xl); }
-.mb-2xl { margin-bottom: var(--space-2xl); }
+.mt-sm {
+  margin-top: var(--space-sm);
+}
 
-.p-xs { padding: var(--space-xs); }
-.p-sm { padding: var(--space-sm); }
-.p-md { padding: var(--space-md); }
-.p-lg { padding: var(--space-lg); }
-.p-xl { padding: var(--space-xl); }
-.p-2xl { padding: var(--space-2xl); }
+.mt-md {
+  margin-top: var(--space-md);
+}
+
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+
+.mt-2xl {
+  margin-top: var(--space-2xl);
+}
+
+.mb-xs {
+  margin-bottom: var(--space-xs);
+}
+
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+
+.mb-xl {
+  margin-bottom: var(--space-xl);
+}
+
+.mb-2xl {
+  margin-bottom: var(--space-2xl);
+}
+
+.p-xs {
+  padding: var(--space-xs);
+}
+
+.p-sm {
+  padding: var(--space-sm);
+}
+
+.p-md {
+  padding: var(--space-md);
+}
+
+.p-lg {
+  padding: var(--space-lg);
+}
+
+.p-xl {
+  padding: var(--space-xl);
+}
+
+.p-2xl {
+  padding: var(--space-2xl);
+}
 
 /* Flex布局 */
 .flex {
@@ -203,11 +258,25 @@
   justify-content: space-between;
 }
 
-.gap-xs { gap: var(--space-xs); }
-.gap-sm { gap: var(--space-sm); }
-.gap-md { gap: var(--space-md); }
-.gap-lg { gap: var(--space-lg); }
-.gap-xl { gap: var(--space-xl); }
+.gap-xs {
+  gap: var(--space-xs);
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+
+.gap-md {
+  gap: var(--space-md);
+}
+
+.gap-lg {
+  gap: var(--space-lg);
+}
+
+.gap-xl {
+  gap: var(--space-xl);
+}
 
 /* Grid布局 */
 .grid {
@@ -227,17 +296,42 @@
 }
 
 /* 圆角 */
-.rounded-sm { border-radius: var(--radius-sm); }
-.rounded-md { border-radius: var(--radius-md); }
-.rounded-lg { border-radius: var(--radius-lg); }
-.rounded-xl { border-radius: var(--radius-xl); }
-.rounded-full { border-radius: var(--radius-full); }
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+
+.rounded-full {
+  border-radius: var(--radius-full);
+}
 
 /* 阴影 */
-.shadow-sm { box-shadow: var(--shadow-sm); }
-.shadow-md { box-shadow: var(--shadow-md); }
-.shadow-lg { box-shadow: var(--shadow-lg); }
-.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
 
 /* 过渡 */
 .transition {

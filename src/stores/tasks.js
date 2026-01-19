@@ -38,8 +38,10 @@ export const useTasksStore = defineStore('tasks', {
       const saved = await loadFromStorage('tasks')
       if (saved) {
         this.$patch(saved)
-      } else {
-        // 初始化任务列表
+      }
+
+      // 确保 availableTasks 始终从模板初始化
+      if (!this.availableTasks || this.availableTasks.length === 0) {
         this.availableTasks = TASK_TEMPLATES.map(t => ({
           ...t,
           id: generateId(),
@@ -55,7 +57,8 @@ export const useTasksStore = defineStore('tasks', {
     resetDailyTasks() {
       const today = dayjs().format('YYYY-MM-DD')
 
-      if (this.lastResetDate !== today) {
+      // 如果日期变化或者 activeTasks 为空，则重置
+      if (this.lastResetDate !== today || !this.activeTasks || this.activeTasks.length === 0) {
         this.activeTasks = this.availableTasks
           .filter(t => t.frequency === 'daily')
           .map(t => ({

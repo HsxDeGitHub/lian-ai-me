@@ -51,7 +51,9 @@
     </div>
 
     <!-- 底部导航 -->
-    <TabBar />
+    <div class="tab-bar-wrapper">
+      <TabBar />
+    </div>
   </div>
 </template>
 
@@ -267,5 +269,14 @@ const purchaseItem = async (item) => {
   background: var(--color-border);
   color: var(--color-text-secondary);
   cursor: not-allowed;
+}
+
+/* 固定底部导航栏 */
+.tab-bar-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
 }
 </style>
