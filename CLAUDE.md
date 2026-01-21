@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Development
-npm run dev          # Start dev server (Vite, defaults to localhost:3000)
+npm run dev          # Start dev server (Vite, defaults to localhost:3000, auto-opens browser)
 
 # Build
 npm run build        # Production build
@@ -26,8 +26,24 @@ npm run preview      # Preview production build
 - **State**: Pinia (stores pattern)
 - **Router**: Vue Router 4
 - **Dates**: Day.js
+- **Path Alias**: `@` → `src/` directory
 
 ## Architecture
+
+### Router Structure
+
+Routes defined in `src/router/routes.js` with lazy-loaded components:
+- `/` - Home (我的小窝) - main hub with `keepAlive: true`
+- `/onboarding` - Welcome flow (hidden for logged-in users)
+- `/room` - House decorator (no tab bar)
+- `/shop` - Shop (汪汪市集)
+- `/tasks` - Tasks (光荣之爪)
+- `/diary` - Diary (爪印日记)
+- `/community` - Community (散步广场)
+- `/stats` - Stats (数据洞察)
+- `/profile` - Profile (个人中心)
+
+Routes use `meta.showTab` to control TabBar visibility.
 
 ### State Management Pattern
 
@@ -67,11 +83,27 @@ All stores use Pinia with `defineStore()` accepting either an options object or 
 
 Located in `src/data/`:
 - `shopItems.js` - Item catalog with `placementZone` field
+  - Categories: `furniture`, `dog-items`, `experiences`, `digital`
+  - Types: `furniture`, `accessory`, `toy`, `consumable`, `upgrade`, `skin`
+  - Rarities: `common`, `rare`, `epic`, `legendary`
 - `houseZones.js` - Zone definitions with bounds (%), default positions, styles
 - `dogBreeds.js` - Unlockable dog breeds (time-gated)
 - `moods.js` - Mood definitions with associated colors/animations
 - `tasks.js` - Daily task definitions
 - `achievements.js` - Milestone/badge definitions
+- `mockPosts.js` - Sample community posts
+
+### Component Directory
+
+`src/components/` - Shared components organized by domain:
+- `charts/` - Chart/visualization components
+- `common/` - Generic UI components
+- `community/` - Social feature components
+- `currency/` - Bone coin display components
+- `diary/` - Diary entry components
+- `dog/` - Dog-related components
+- `task/` - Task/achievement components
+- `timer/` - Time display components
 
 ### View Structure
 
@@ -119,13 +151,18 @@ const dogStore = useDogStore()  // called within actions, not top-level
 
 ### Item Data Structure
 
-**Catalog Item** (SHOP_ITEMS):
+**Item Types** (SHOP_ITEMS):
 ```javascript
 {
   id, name, category, type, price, icon, description, rarity,
-  placementZone  // for furniture: 'ground' | 'wall' | 'outdoor'
+  placementZone,  // for furniture: 'ground' | 'wall' | 'outdoor'
+  effect          // for consumables: 'restore_energy' | 'happy_animation'
 }
 ```
+
+**Categories**: `furniture`, `dog-items`, `experiences`, `digital`
+**Types**: `furniture`, `accessory`, `toy`, `consumable`, `upgrade`, `skin`
+**Rarities**: `common`, `rare`, `epic`, `legendary`
 
 **Placed Item** (dog.houseItems):
 ```javascript
@@ -176,14 +213,18 @@ onDrag(event, canvasRect) {
 
 ### Purchase Side Effects
 
-When `shop.purchaseItem()` is called:
-1. Deduct currency via `currencyStore.spend()`
-2. Add to `shop.ownedItems`
-3. **Furniture**: Auto-place via `dogStore.addHouseItem()` with zone/position
-4. **Accessories**: Add via `dogStore.addAccessory()`
-5. **Consumables**: Apply effect immediately (e.g., restore energy)
-6. **Upgrades**: Modify `dogStore.houseLevel`
-7. Check achievements via `achievementStore.checkAchievements()`
+When `shop.purchaseItem(itemId)` is called (from `src/stores/shop.js`):
+1. Validates item exists and not already owned
+2. Deduct currency via `currencyStore.spend(price, item, description)`
+3. Add to `shop.ownedItems` with `purchasedAt` timestamp
+4. **Type-specific handling**:
+   - `furniture`: Auto-place to `item.placementZone` with random offset (±5%) from zone's default position
+   - `upgrade`: Call `dogStore.upgradeHouse(houseLevel + 1)`
+   - `accessory`: Call `dogStore.addAccessory(item)`
+   - `consumable`: Apply effect immediately (e.g., `restore_energy` → `dogStore.restoreEnergy()`)
+   - `toy`, `skin`: Only add to owned items
+5. Check achievements via `achievementStore.checkAchievements('items_purchased', total)`
+6. Persist state to localStorage
 
 ## Important File Locations
 
