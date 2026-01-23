@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { storeToRefs } from 'pinia'
 import { saveToStorage, loadFromStorage } from '@/utils/helpers'
 import { useUserStore } from './user'
 import dayjs from 'dayjs'
