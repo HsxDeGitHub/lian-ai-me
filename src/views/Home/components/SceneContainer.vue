@@ -171,6 +171,7 @@ import { useDogStore } from "@/stores/dog";
 import { useCurrencyStore } from "@/stores/currency";
 import { useRoomStore } from "@/stores/room";
 import DogInteractionModal from "@/components/dog/DogInteractionModal.vue";
+import { useTimer } from "@/composables/useTimer";
 import dayjs from "dayjs";
 
 const router = useRouter();
@@ -295,21 +296,15 @@ const goToRoomDecorator = () => {
   router.push("/room");
 };
 
-// 定时更新
-let timerInterval = null;
+// 使用 useTimer composable，自动清理定时器
+const { start: startTimer } = useTimer(() => {
+  // 每秒触发响应式更新
+  timerKey.value++;
+  timerStore.checkMilestones();
+}, 1000);
 
 onMounted(() => {
-  // 每秒更新计时器
-  timerInterval = setInterval(() => {
-    timerKey.value++; // 强制触发响应式更新
-    timerStore.checkMilestones();
-  }, 1000);
-});
-
-onUnmounted(() => {
-  if (timerInterval) {
-    clearInterval(timerInterval);
-  }
+  startTimer();
 });
 </script>
 
