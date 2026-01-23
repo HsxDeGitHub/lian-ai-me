@@ -1,33 +1,38 @@
 <template>
   <div class="shop-page">
     <!-- 顶部导航 -->
-    <div class="page-header">
-      <div class="currency-card">
-        <span class="coin-icon">🦴</span>
+    <header class="page-header" role="banner">
+      <div class="currency-card" aria-label="骨头币余额">
+        <span class="coin-icon" aria-hidden="true">🦴</span>
         <span class="coin-amount">{{ currencyStore.balance }}</span>
       </div>
       <h1 class="shop-title">🛒 汪汪市集</h1>
-      <div class="header-spacer"></div>
-    </div>
+      <div class="header-spacer" aria-hidden="true"></div>
+    </header>
 
     <!-- 分类标签 -->
-    <div class="category-tabs">
-      <button
-        v-for="category in shopStore.categories"
-        :key="category.id"
-        @click="selectCategory(category.id)"
-        class="category-chip"
-        :class="{ active: shopStore.selectedCategory === category.id }"
-      >
-        <span class="chip-icon">{{ category.icon }}</span>
-        <span class="chip-name">{{ category.name }}</span>
-      </button>
-    </div>
+    <nav class="category-tabs" aria-label="商品分类">
+      <div role="tablist" class="category-list">
+        <button
+          v-for="category in shopStore.categories"
+          :key="category.id"
+          @click="selectCategory(category.id)"
+          class="category-chip"
+          :class="{ active: shopStore.selectedCategory === category.id }"
+          role="tab"
+          :aria-selected="shopStore.selectedCategory === category.id"
+          :aria-label="`${category.name}分类，${getCategoryItemCount(category.id)}件商品`"
+        >
+          <span class="chip-icon" aria-hidden="true">{{ category.icon }}</span>
+          <span class="chip-name">{{ category.name }}</span>
+        </button>
+      </div>
+    </nav>
 
     <!-- 商品网格 -->
-    <div class="items-section">
-      <div class="items-grid">
-        <div
+    <main class="items-section" role="main" :aria-label="`${getCurrentCategoryName()}商品列表`">
+      <div class="items-grid" role="list">
+        <article
           v-for="item in currentCategoryItems"
           :key="item.id"
           class="shop-item-card"
@@ -35,9 +40,11 @@
             getQualityClass(item.rarity),
             { owned: shopStore.isItemOwned(item.id) }
           ]"
+          role="listitem"
+          :aria-label="`${item.name}，${item.description}，${getRarityLabel(item.rarity)}品质，${item.price}骨头币${shopStore.isItemOwned(item.id) ? '，已拥有' : ''}`"
         >
           <!-- 物品图标区域 -->
-          <div class="item-display">
+          <div class="item-display" aria-hidden="true">
             <div class="item-icon-wrapper">
               <span class="item-emoji">{{ item.icon }}</span>
               <!-- 稀有度光效 -->
@@ -46,7 +53,7 @@
               <div v-else-if="item.rarity === 'rare'" class="rarity-glow rare"></div>
             </div>
             <!-- 已拥有标签 -->
-            <div v-if="shopStore.isItemOwned(item.id)" class="owned-badge">
+            <div v-if="shopStore.isItemOwned(item.id)" class="owned-badge" aria-label="已拥有">
               <span>✓</span>
             </div>
           </div>
@@ -58,8 +65,8 @@
 
             <!-- 价格和购买按钮 -->
             <div class="item-action">
-              <div class="price-tag">
-                <span class="price-icon">🦴</span>
+              <div class="price-tag" aria-label="价格">
+                <span class="price-icon" aria-hidden="true">🦴</span>
                 <span class="price-value">{{ item.price }}</span>
               </div>
               <button
@@ -67,15 +74,16 @@
                 class="buy-btn"
                 :class="{ owned: shopStore.isItemOwned(item.id) }"
                 :disabled="shopStore.isItemOwned(item.id)"
+                :aria-label="`${shopStore.isItemOwned(item.id) ? '已拥有' : '购买'}${item.name}`"
               >
                 <span v-if="!shopStore.isItemOwned(item.id)">购买</span>
                 <span v-else>已拥有</span>
               </button>
             </div>
           </div>
-        </div>
+        </article>
       </div>
-    </div>
+    </main>
 
     <!-- 底部导航占位 -->
     <div class="tab-bar-spacer"></div>
@@ -104,6 +112,25 @@ const selectCategory = (categoryId) => {
 
 const getQualityClass = (rarity) => {
   return `quality-${rarity || 'common'}`
+}
+
+const getRarityLabel = (rarity) => {
+  const labels = {
+    common: '普通',
+    rare: '稀有',
+    epic: '史诗',
+    legendary: '传说'
+  }
+  return labels[rarity] || '普通'
+}
+
+const getCurrentCategoryName = () => {
+  const category = shopStore.categories.find(c => c.id === shopStore.selectedCategory)
+  return category?.name || '全部'
+}
+
+const getCategoryItemCount = (categoryId) => {
+  return shopStore.itemsByCategory(categoryId).length
 }
 
 const purchaseItem = async (item) => {
