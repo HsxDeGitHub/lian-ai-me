@@ -8,6 +8,8 @@
           :class="['toast', `toast-${toast.type}`]"
           role="alert"
           :aria-live="toast.type === 'error' ? 'assertive' : 'polite'"
+          :aria-atomic="true"
+          :aria-label="`${getTypeLabel(toast.type)}: ${toast.message}`"
         >
           <span class="toast-icon">{{ getIcon(toast.type) }}</span>
           <span class="toast-message">{{ toast.message }}</span>
@@ -78,6 +80,19 @@ function getIcon(type) {
     info: 'ℹ'
   }
   return icons[type] || icons.info
+}
+
+/**
+ * 获取类型对应的中文标签
+ */
+function getTypeLabel(type) {
+  const labels = {
+    success: '成功',
+    error: '错误',
+    warning: '警告',
+    info: '提示'
+  }
+  return labels[type] || labels.info
 }
 
 /**

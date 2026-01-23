@@ -1,12 +1,25 @@
 <template>
   <Teleport to="body">
     <transition name="modal">
-      <div v-if="show" class="modal-overlay" @click="handleClose">
-        <div class="modal-content" @click.stop>
+      <div
+        v-if="show"
+        class="modal-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="'modal-title-' + modalId"
+        @click="handleClose"
+        @keydown.esc="handleClose"
+      >
+        <div class="modal-content" @click.stop ref="modalContent">
           <!-- 头部 -->
           <div class="modal-header">
-            <h2 class="modal-title">和{{ dogStore.name }}互动</h2>
-            <button class="close-btn" @click="handleClose" aria-label="关闭">
+            <h2 :id="'modal-title-' + modalId" class="modal-title">和{{ dogStore.name }}互动</h2>
+            <button
+              class="close-btn"
+              @click="handleClose"
+              aria-label="关闭互动模态框"
+              ref="closeButtonRef"
+            >
               ✕
             </button>
           </div>
@@ -38,14 +51,16 @@
           </div>
 
           <!-- 互动选项 -->
-          <div class="interaction-grid">
+          <div class="interaction-grid" role="group" aria-label="互动选项">
             <button
               class="interaction-btn"
               :class="{ disabled: !canInteract }"
               @click="handleInteract('pet')"
               :disabled="!canInteract"
+              :aria-label="`抚摸${dogStore.name}，消耗5点活力值`"
+              :aria-describedby="canInteract ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">🤚</span>
+              <span class="btn-icon" aria-hidden="true">🤚</span>
               <span class="btn-label">抚摸</span>
               <span class="btn-cost">-5 活力</span>
             </button>
@@ -55,8 +70,12 @@
               :class="{ disabled: !canInteract }"
               @click="showFeedMenu"
               :disabled="!canInteract"
+              :aria-label="`喂食${dogStore.name}，增加活力值`"
+              :aria-haspopup="true"
+              :aria-expanded="showFeedOptions"
+              :aria-describedby="canInteract ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">🍖</span>
+              <span class="btn-icon" aria-hidden="true">🍖</span>
               <span class="btn-label">喂食</span>
               <span class="btn-cost">+活力</span>
             </button>
@@ -66,8 +85,10 @@
               :class="{ disabled: !canInteract || dogStore.energy < 15 }"
               @click="handleInteract('play')"
               :disabled="!canInteract || dogStore.energy < 15"
+              :aria-label="`和${dogStore.name}玩耍，消耗15点活力值`"
+              :aria-describedby="canInteract && dogStore.energy >= 15 ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">🎾</span>
+              <span class="btn-icon" aria-hidden="true">🎾</span>
               <span class="btn-label">玩耍</span>
               <span class="btn-cost">-15 活力</span>
             </button>
@@ -77,8 +98,10 @@
               :class="{ disabled: !canInteract }"
               @click="handleInteract('talk')"
               :disabled="!canInteract"
+              :aria-label="`和${dogStore.name}说话，消耗3点活力值`"
+              :aria-describedby="canInteract ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">💬</span>
+              <span class="btn-icon" aria-hidden="true">💬</span>
               <span class="btn-label">说话</span>
               <span class="btn-cost">-3 活力</span>
             </button>
@@ -88,8 +111,10 @@
               :class="{ disabled: !canInteract || dogStore.energy < 15 }"
               @click="handlePerformTrick"
               :disabled="!canInteract || dogStore.energy < 15"
+              :aria-label="`观看${dogStore.name}表演技能，消耗15点活力值`"
+              :aria-describedby="canInteract && dogStore.energy >= 15 ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">🎪</span>
+              <span class="btn-icon" aria-hidden="true">🎪</span>
               <span class="btn-label">表演技能</span>
               <span class="btn-cost">-15 活力</span>
             </button>
@@ -99,40 +124,66 @@
               :class="{ disabled: !canInteract || dogStore.energy < 10 }"
               @click="handleInteract('groom')"
               :disabled="!canInteract || dogStore.energy < 10"
+              :aria-label="`为${dogStore.name}梳毛，消耗10点活力值`"
+              :aria-describedby="canInteract && dogStore.energy >= 10 ? '' : 'interaction-limit'"
             >
-              <span class="btn-icon">✨</span>
+              <span class="btn-icon" aria-hidden="true">✨</span>
               <span class="btn-label">梳毛</span>
               <span class="btn-cost">-10 活力</span>
             </button>
           </div>
 
           <!-- 提示信息 -->
-          <div v-if="!canInteract" class="limit-warning">
+          <div v-if="!canInteract" class="limit-warning" id="interaction-limit" role="alert" aria-live="polite">
             ⚠️ 今天互动次数已达上限，明天再来吧！
           </div>
 
           <!-- 喂食菜单 -->
           <transition name="fade">
-            <div v-if="showFeedOptions" class="feed-menu">
-              <h3 class="feed-menu-title">选择食物</h3>
-              <div class="feed-options">
-                <button class="feed-btn" @click="handleFeed('snack')">
-                  <span class="feed-icon">🍪</span>
+            <div
+              v-if="showFeedOptions"
+              class="feed-menu"
+              role="dialog"
+              aria-modal="false"
+              aria-labelledby="feed-menu-title"
+            >
+              <h3 id="feed-menu-title" class="feed-menu-title">选择食物</h3>
+              <div class="feed-options" role="group" aria-label="食物选项">
+                <button
+                  class="feed-btn"
+                  @click="handleFeed('snack')"
+                  :aria-label="`给${dogStore.name}喂零食，恢复10点活力值`"
+                >
+                  <span class="feed-icon" aria-hidden="true">🍪</span>
                   <span class="feed-name">零食</span>
                   <span class="feed-effect">+10 活力</span>
                 </button>
-                <button class="feed-btn" @click="handleFeed('meal')">
-                  <span class="feed-icon">🍲</span>
+                <button
+                  class="feed-btn"
+                  @click="handleFeed('meal')"
+                  :aria-label="`给${dogStore.name}喂正餐，恢复30点活力值`"
+                >
+                  <span class="feed-icon" aria-hidden="true">🍲</span>
                   <span class="feed-name">正餐</span>
                   <span class="feed-effect">+30 活力</span>
                 </button>
-                <button class="feed-btn" @click="handleFeed('treat')">
-                  <span class="feed-icon">🦴</span>
+                <button
+                  class="feed-btn"
+                  @click="handleFeed('treat')"
+                  :aria-label="`给${dogStore.name}喂骨头奖励，恢复15点活力值`"
+                >
+                  <span class="feed-icon" aria-hidden="true">🦴</span>
                   <span class="feed-name">骨头奖励</span>
                   <span class="feed-effect">+15 活力</span>
                 </button>
               </div>
-              <button class="feed-close-btn" @click="hideFeedMenu">取消</button>
+              <button
+                class="feed-close-btn"
+                @click="hideFeedMenu"
+                aria-label="取消喂食"
+              >
+                取消
+              </button>
             </div>
           </transition>
         </div>
@@ -142,8 +193,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useDogStore } from '@/stores/dog'
+import { keyboardNav, generateAriaId } from '@/utils/accessibility'
 
 const props = defineProps({
   show: {
@@ -156,6 +208,11 @@ const emit = defineEmits(['close'])
 
 const dogStore = useDogStore()
 const showFeedOptions = ref(false)
+const modalContent = ref(null)
+const closeButtonRef = ref(null)
+const modalId = generateAriaId('dog-interaction-modal')
+let cleanupFocusTrap = null
+let previouslyFocusedElement = null
 
 // 是否可以互动
 const canInteract = computed(() => dogStore.canInteract)
@@ -218,6 +275,10 @@ const showFeedMenu = () => {
 // 隐藏喂食菜单
 const hideFeedMenu = () => {
   showFeedOptions.value = false
+  // 返回焦点到喂食按钮
+  nextTick(() => {
+    closeButtonRef.value?.focus()
+  })
 }
 
 // 喂食处理
@@ -243,6 +304,53 @@ const handlePerformTrick = () => {
     window.$toast?.info('📚 还没有学会技能哦')
   }
 }
+
+// 焦点管理
+const setupFocusManagement = () => {
+  // 保存当前焦点元素
+  previouslyFocusedElement = document.activeElement
+
+  // 等待 DOM 更新后设置焦点
+  nextTick(() => {
+    if (modalContent.value) {
+      // 设置焦点陷阱
+      cleanupFocusTrap = keyboardNav.trapFocus(modalContent.value)
+
+      // 将焦点设置到关闭按钮
+      closeButtonRef.value?.focus()
+    }
+  })
+}
+
+const cleanupFocusManagement = () => {
+  // 清理焦点陷阱
+  if (cleanupFocusTrap) {
+    cleanupFocusTrap()
+    cleanupFocusTrap = null
+  }
+
+  // 恢复之前的焦点
+  if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
+    previouslyFocusedElement.focus()
+    previouslyFocusedElement = null
+  }
+}
+
+// 监听模态框显示状态
+watch(() => props.show, (newValue) => {
+  if (newValue) {
+    setupFocusManagement()
+  } else {
+    cleanupFocusManagement()
+    // 重置喂食菜单状态
+    showFeedOptions.value = false
+  }
+})
+
+// 组件卸载时清理
+onBeforeUnmount(() => {
+  cleanupFocusManagement()
+})
 </script>
 
 <style scoped>

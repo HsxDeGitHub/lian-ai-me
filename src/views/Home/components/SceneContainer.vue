@@ -22,41 +22,52 @@
     <!-- 主内容区域 -->
     <div class="scene-content">
       <!-- 顶部状态栏 -->
-      <div class="top-bar">
+      <div class="top-bar" role="banner">
         <!-- 骨头币显示 -->
-        <div class="currency-display">
-          <span class="coin-icon">🦴</span>
+        <div class="currency-display" aria-label="骨头币余额">
+          <span class="coin-icon" aria-hidden="true">🦴</span>
           <span class="coin-amount">{{ currencyStore.balance }}</span>
         </div>
 
         <!-- 设置按钮 -->
-        <router-link to="/profile" class="settings-btn"> ⚙️ </router-link>
+        <router-link
+          to="/profile"
+          class="settings-btn"
+          aria-label="前往个人中心设置"
+          role="button"
+        >
+          <span aria-hidden="true">⚙️</span>
+        </router-link>
       </div>
 
       <!-- 计时器卡片 -->
-      <div class="timer-card animate-fade-in-up hover-lift">
-        <div class="timer-label">单身时长</div>
-        <div class="timer-display">{{ timeString }}</div>
-        <div class="timer-stats">
-          <div class="stat-item">
-            <span class="stat-icon">🎯</span>
+      <div
+        class="timer-card animate-fade-in-up hover-lift"
+        role="region"
+        aria-labelledby="timer-label"
+      >
+        <div id="timer-label" class="timer-label">单身时长</div>
+        <div class="timer-display" aria-live="polite" aria-atomic="true">{{ timeString }}</div>
+        <div class="timer-stats" role="list">
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">🎯</span>
             <span class="stat-text">{{ singleDays }}天</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-icon">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
             <span class="stat-text">{{ dogStore.name }}</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-icon">💕</span>
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">💕</span>
             <span class="stat-text">好感度 {{ dogStore.interactionCount }}</span>
           </div>
         </div>
       </div>
 
       <!-- 狗狗场景 -->
-      <div class="dog-scene">
+      <div class="dog-scene" aria-label="狗狗活动场景">
         <!-- 装饰背景层 -->
-        <div class="scene-decor-layer">
+        <div class="scene-decor-layer" aria-hidden="true">
           <div class="pond">
             <div class="water-reflection"></div>
             <div class="duck">🦆</div>
@@ -65,7 +76,7 @@
         </div>
 
         <!-- 狗屋 (草屋) -->
-        <div class="dog-house cottage-style" :class="`house-level-${dogStore.houseLevel}`">
+        <div class="dog-house cottage-style" :class="`house-level-${dogStore.houseLevel}`" aria-hidden="true">
           <div class="chimney">
             <div class="smoke"></div>
           </div>
@@ -80,7 +91,7 @@
         </div>
 
         <!-- 已放置的家具 -->
-        <div class="placed-furniture">
+        <div class="placed-furniture" role="list" :aria-label="`已放置的家具，共${visibleFurniture.length}件`">
           <div
             v-for="item in visibleFurniture"
             :key="item.instanceId || item.id"
@@ -90,27 +101,31 @@
               left: (item.position?.x || 50) + '%',
               bottom: (item.position?.y || 10) + '%'
             }"
+            role="listitem"
+            :aria-label="`${item.name}，${item.description || ''}`"
           >
             {{ item.icon }}
           </div>
         </div>
 
         <!-- 狗狗 -->
-        <div
+        <button
           class="dog-character hover-scale"
           :class="dogAnimationClass"
           @click="interactWithDog"
+          :aria-label="`和${dogStore.name}互动，当前心情：${moodText}`"
           :title="`点击和${dogStore.name}互动`"
         >
-          <div class="dog-emoji">{{ dogStore.dogInfo?.emoji || "🐶" }}</div>
+          <div class="dog-emoji" aria-hidden="true">{{ dogStore.dogInfo?.emoji || "🐶" }}</div>
           <div
             class="dog-mood-indicator animate-pulse-glow"
             :style="{ backgroundColor: dogStore.moodInfo?.color }"
+            :aria-label="`${dogStore.name}的心情指示器`"
           ></div>
           <!-- 心形效果 -->
-          <div class="heart-float animate-fade-in-slide" v-if="showHeart">💕</div>
+          <div class="heart-float animate-fade-in-slide" v-if="showHeart" aria-hidden="true">💕</div>
           <!-- 装饰品 -->
-          <div v-if="dogStore.accessories.length > 0" class="dog-accessories">
+          <div v-if="dogStore.accessories.length > 0" class="dog-accessories" aria-hidden="true">
             <span
               v-for="accessory in dogStore.accessories"
               :key="accessory.id"
@@ -119,11 +134,11 @@
               {{ accessory.icon }}
             </span>
           </div>
-        </div>
+        </button>
 
         <!-- 狗狗状态 -->
-        <div class="dog-status">
-          <div class="energy-bar">
+        <div class="dog-status" role="status" aria-live="polite">
+          <div class="energy-bar" role="progressbar" :aria-valuenow="dogStore.energy" aria-valuemin="0" aria-valuemax="100" :aria-label="`${dogStore.name}的活力值：${dogStore.energy}%`">
             <div
               class="energy-fill"
               :style="{ width: dogStore.energy + '%' }"
@@ -134,21 +149,37 @@
       </div>
 
       <!-- 快捷操作 -->
-      <div class="quick-actions">
-        <button @click="openDiary" class="action-btn">
-          <span class="action-icon">📝</span>
+      <div class="quick-actions" role="group" aria-label="快捷操作">
+        <button
+          @click="openDiary"
+          class="action-btn"
+          :aria-label="`打开日记，记录当前心情`"
+        >
+          <span class="action-icon" aria-hidden="true">📝</span>
           <span class="action-label">记心情</span>
         </button>
-        <button @click="goToTasks" class="action-btn">
-          <span class="action-icon">⭐</span>
+        <button
+          @click="goToTasks"
+          class="action-btn"
+          aria-label="查看并完成任务，获取奖励"
+        >
+          <span class="action-icon" aria-hidden="true">⭐</span>
           <span class="action-label">做任务</span>
         </button>
-        <button @click="goToShop" class="action-btn">
-          <span class="action-icon">🛒</span>
+        <button
+          @click="goToShop"
+          class="action-btn"
+          aria-label="前往商店购买物品和食物"
+        >
+          <span class="action-icon" aria-hidden="true">🛒</span>
           <span class="action-label">逛商店</span>
         </button>
-        <button @click="goToRoomDecorator" class="action-btn highlight-btn">
-          <span class="action-icon">🏡</span>
+        <button
+          @click="goToRoomDecorator"
+          class="action-btn highlight-btn"
+          aria-label="布置小屋，放置家具和装饰"
+        >
+          <span class="action-icon" aria-hidden="true">🏡</span>
           <span class="action-label">布置小屋</span>
         </button>
       </div>

@@ -172,9 +172,91 @@
   - 创建全局 Loading 组件
   - 预计工作量: 6-8 小时
 
-### 阶段四：UI/UX 优化 (0% 完成)
-- [ ] 4.1 增强可访问性 (12-16 小时)
-- [ ] 4.2 UI 过渡和动画优化 (8-10 小时)
+### 阶段四：UI/UX 优化 (30% 完成)
+
+#### 4.1 增强可访问性 ✅ 部分完成
+
+**新建文件**:
+- `src/utils/accessibility.js` - 可访问性工具函数（307行）
+- `src/styles/accessibility.css` - 全局可访问性样式（330行）
+
+**增强组件**:
+1. **Toast.vue** ✅
+   - 添加 `role="alert"`
+   - 添加 `aria-live` 和 `aria-atomic`
+   - 添加 `aria-label` 与类型标签
+   - 图标设置 `aria-hidden="true"`
+
+2. **DogInteractionModal.vue** ✅
+   - 添加 `role="dialog"` 和 `aria-modal="true"`
+   - 实现 ESC 键关闭
+   - 实现焦点陷阱（使用 `keyboardNav.trapFocus`）
+   - 实现焦点保存和恢复
+   - 为所有按钮添加详细的 `aria-label`
+   - 为互动按钮添加 `aria-describedby`
+   - 为喂食按钮添加 `aria-haspopup` 和 `aria-expanded`
+   - 狗狗状态使用 `role="progressbar"` 和 ARIA 值
+
+3. **SceneContainer.vue** ✅
+   - 顶部状态栏添加 `role="banner"`
+   - 计时器卡片添加 `role="region"` 和 `aria-labelledby`
+   - 计时器显示添加 `aria-live="polite"`
+   - 统计列表添加 `role="list"`
+   - 设置链接添加 `role="button"`
+   - 快捷操作按钮添加详细 `aria-label`
+   - 家具列表添加 `role="list"` 和 `aria-label`
+   - 狗狗角色改为 `<button>` 并添加 `aria-label`
+   - 能量条添加 `role="progressbar"` 和 ARIA 值
+   - 狗狗状态添加 `role="status"` 和 `aria-live`
+
+4. **CommunityView.vue** ✅
+   - 帖子列表添加 `role="feed"`
+   - 帖子卡片改为 `<article>`
+   - 帖子头部改为 `<header>`
+   - 时间改为 `<time>` 元素
+   - 帖子操作改为 `<footer>`
+   - 点赞按钮添加 `aria-pressed` 和详细 `aria-label`
+   - 发帖模态框添加完整可访问性支持
+   - 心情选择器使用 `<fieldset>` 和 `<legend>`
+   - 文本域添加标签和 `aria-describedby`
+   - 添加 `getMoodLabel()` 函数
+
+5. **DiaryView.vue** ✅
+   - 日记列表添加 `role="feed"`
+   - 日记卡片改为 `<article>`
+   - 时间改为 `<time>` 元素
+   - 日记文本改为 `<p>`
+   - 创建日记模态框添加完整可访问性支持
+   - 心情选择器使用 `<fieldset>` 和 `<legend>`
+   - 文本域添加标签和 `aria-describedby`
+   - 空状态添加 `role="status"` 和 `aria-live`
+   - 添加 `getMoodLabel()` 函数
+
+**全局可访问性支持**:
+- ✅ 屏幕阅读器辅助类（`.sr-only`, `.visually-hidden`）
+- ✅ 焦点可见性改进（`:focus-visible`）
+- ✅ 触摸目标最小尺寸（44x44px）
+- ✅ 减少动画偏好支持（`prefers-reduced-motion`）
+- ✅ 高对比度模式支持
+- ✅ 深色模式可访问性
+- ✅ 键盘导航样式
+- ✅ 表单可访问性改进
+- ✅ 进度条可访问性
+
+**剩余工作**:
+- [ ] ShopView.vue 可访问性增强
+- [ ] TasksView.vue 可访问性增强
+- [ ] ProfileView.vue 可访问性增强
+- [ ] RoomDecoratorView.vue 可访问性增强
+- [ ] 添加键盘快捷键支持（方向键导航）
+- [ ] 添加跳转到主内容的链接
+- [ ] 测试屏幕阅读器兼容性
+
+**时间投入**: 约 4-5 小时完成（5个主要组件）
+
+---
+
+#### 4.2 UI 过渡和动画优化 (0% 完成)
 - [ ] 4.3 响应式设计优化 (8-10 小时)
 
 ---

@@ -2,13 +2,17 @@
   <div class="diary-view">
     <div class="diary-header">
       <h1 class="diary-title">📝 爪印日记</h1>
-      <button @click="showCreateModal = true" class="create-btn">
+      <button
+        @click="showCreateModal = true"
+        class="create-btn"
+        aria-label="创建新日记"
+      >
         <span>+ 写日记</span>
       </button>
     </div>
 
     <!-- 统计信息 -->
-    <div class="diary-stats">
+    <div class="diary-stats" role="region" aria-label="日记统计">
       <div class="stat-card">
         <span class="stat-value">{{ diaryStore.entries.length }}</span>
         <span class="stat-label">总日记</span>
@@ -20,52 +24,92 @@
     </div>
 
     <!-- 日记列表 -->
-    <div class="diary-list">
-      <div
+    <div class="diary-list" role="feed" aria-label="日记列表">
+      <article
         v-for="entry in diaryStore.recentEntries"
         :key="entry.id"
         class="diary-card"
       >
-        <div class="diary-mood">{{ getMoodIcon(entry.mood) }}</div>
-        <div class="diary-content">
-          <div class="diary-date">{{ formatDate(entry.createdAt) }}</div>
-          <div class="diary-text">{{ entry.content }}</div>
+        <div
+          class="diary-mood"
+          :aria-label="`心情：${getMoodLabel(entry.mood)}`"
+        >
+          <span aria-hidden="true">{{ getMoodIcon(entry.mood) }}</span>
         </div>
-      </div>
+        <div class="diary-content">
+          <time class="diary-date" :datetime="entry.createdAt">{{ formatDate(entry.createdAt) }}</time>
+          <p class="diary-text">{{ entry.content }}</p>
+        </div>
+      </article>
 
-      <div v-if="diaryStore.entries.length === 0" class="empty-state">
+      <div
+        v-if="diaryStore.entries.length === 0"
+        class="empty-state"
+        role="status"
+        aria-live="polite"
+      >
         <p>还没有日记，开始记录吧！</p>
       </div>
     </div>
 
     <!-- 创建日记弹窗 -->
-    <div v-if="showCreateModal" class="modal-overlay" @click="closeModal">
-      <div class="modal-content" @click.stop>
-        <h2 class="modal-title">记录心情</h2>
+    <div
+      v-if="showCreateModal"
+      class="modal-overlay"
+      @click="closeModal"
+      @keydown.esc="closeModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="create-diary-title"
+    >
+      <div class="modal-content" @click.stop role="document">
+        <h2 id="create-diary-title" class="modal-title">记录心情</h2>
 
-        <div class="mood-selector">
-          <button
-            v-for="mood in MOODS"
-            :key="mood.id"
-            @click="selectedMood = mood.id"
-            class="mood-btn"
-            :class="{ active: selectedMood === mood.id }"
-          >
-            <span class="mood-icon">{{ mood.icon }}</span>
-            <span class="mood-name">{{ mood.name }}</span>
-          </button>
-        </div>
+        <fieldset class="mood-selector">
+          <legend class="mood-selector-legend">选择当前心情</legend>
+          <div class="mood-buttons" role="group" aria-label="心情选项">
+            <button
+              v-for="mood in MOODS"
+              :key="mood.id"
+              @click="selectedMood = mood.id"
+              class="mood-btn"
+              :class="{ active: selectedMood === mood.id }"
+              :aria-label="`选择${mood.name}心情`"
+              :aria-pressed="selectedMood === mood.id"
+            >
+              <span class="mood-icon" aria-hidden="true">{{ mood.icon }}</span>
+              <span class="mood-name">{{ mood.name }}</span>
+            </button>
+          </div>
+        </fieldset>
 
+        <label for="diary-content" class="visually-hidden">日记内容</label>
         <textarea
+          id="diary-content"
           v-model="diaryContent"
           class="diary-textarea"
           placeholder="今天发生了什么？有什么感受？"
           rows="6"
+          :aria-describedby="diaryContent ? '' : 'diary-help'"
         ></textarea>
+        <span id="diary-help" class="visually-hidden">请输入你今天的日记内容</span>
 
         <div class="modal-actions">
-          <button @click="closeModal" class="cancel-btn">取消</button>
-          <button @click="saveDiary" class="save-btn">保存</button>
+          <button
+            @click="closeModal"
+            class="cancel-btn"
+            aria-label="取消写日记"
+          >
+            取消
+          </button>
+          <button
+            @click="saveDiary"
+            class="save-btn"
+            :disabled="!diaryContent.trim()"
+            aria-label="保存日记"
+          >
+            保存
+          </button>
         </div>
       </div>
     </div>
@@ -95,6 +139,11 @@ const diaryContent = ref('')
 const getMoodIcon = (moodId) => {
   const mood = MOODS.find(m => m.id === moodId)
   return mood?.icon || '😊'
+}
+
+const getMoodLabel = (moodId) => {
+  const mood = MOODS.find(m => m.id === moodId)
+  return mood?.name || '开心'
 }
 
 const formatDate = (date) => {
@@ -146,6 +195,31 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* 可访问性辅助类 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mood-selector-legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .diary-view {
   min-height: 100vh;
   padding: var(--space-lg);
