@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div class="app">
     <router-view v-slot="{ Component, route }">
       <transition :name="getRouteTransition(route)" mode="out-in">
         <component :is="Component" :key="route.path" />

@@ -31,7 +31,7 @@ app.use(pinia)
 app.use(router)
 
 // 在挂载后初始化所有 stores
-app.mount('#app')
+app.mount('#app');
 
 // 初始化所有 stores
 (async () => {
