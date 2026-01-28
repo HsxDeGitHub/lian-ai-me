@@ -120,6 +120,10 @@ onMounted(() => {
 // 暴露方法给模板ref
 defineExpose({
   show,
+  success: (message, duration) => show(message, 'success', duration),
+  error: (message, duration) => show(message, 'error', duration),
+  warning: (message, duration) => show(message, 'warning', duration),
+  info: (message, duration) => show(message, 'info', duration),
   removeToast,
   clear
 })

@@ -63,11 +63,14 @@
       aria-labelledby="create-diary-title"
     >
       <div class="modal-content" @click.stop role="document">
-        <h2 id="create-diary-title" class="modal-title">记录心情</h2>
+        <div class="modal-header">
+          <h2 id="create-diary-title" class="modal-title">✨ 记录心情</h2>
+          <button class="close-icon-btn" @click="closeModal" aria-label="关闭">✕</button>
+        </div>
 
         <fieldset class="mood-selector">
-          <legend class="mood-selector-legend">选择当前心情</legend>
-          <div class="mood-buttons" role="group" aria-label="心情选项">
+          <legend class="mood-selector-legend">今天的心情是...</legend>
+          <div class="mood-scroller" role="group" aria-label="心情选项">
             <button
               v-for="mood in MOODS"
               :key="mood.id"
@@ -77,38 +80,35 @@
               :aria-label="`选择${mood.name}心情`"
               :aria-pressed="selectedMood === mood.id"
             >
-              <span class="mood-icon" aria-hidden="true">{{ mood.icon }}</span>
+              <div class="mood-icon-wrapper">
+                <span class="mood-icon" aria-hidden="true">{{ mood.icon }}</span>
+              </div>
               <span class="mood-name">{{ mood.name }}</span>
             </button>
           </div>
         </fieldset>
 
-        <label for="diary-content" class="visually-hidden">日记内容</label>
-        <textarea
-          id="diary-content"
-          v-model="diaryContent"
-          class="diary-textarea"
-          placeholder="今天发生了什么？有什么感受？"
-          rows="6"
-          :aria-describedby="diaryContent ? '' : 'diary-help'"
-        ></textarea>
-        <span id="diary-help" class="visually-hidden">请输入你今天的日记内容</span>
+        <div class="diary-input-area">
+          <label for="diary-content" class="visually-hidden">日记内容</label>
+          <textarea
+            id="diary-content"
+            v-model="diaryContent"
+            class="diary-textarea"
+            placeholder="今天发生了什么有趣的、难忘的事情？写下来吧..."
+            rows="6"
+            :aria-describedby="diaryContent ? '' : 'diary-help'"
+          ></textarea>
+          <span id="diary-help" class="visually-hidden">请输入你今天的日记内容</span>
+        </div>
 
         <div class="modal-actions">
           <button
-            @click="closeModal"
-            class="cancel-btn"
-            aria-label="取消写日记"
-          >
-            取消
-          </button>
-          <button
             @click="saveDiary"
             class="save-btn"
-            :disabled="!diaryContent.trim()"
+            :disabled="!diaryContent.trim() || isSaving"
             aria-label="保存日记"
           >
-            保存
+            {{ isSaving ? '保存中...' : '保存日记' }}
           </button>
         </div>
       </div>
@@ -150,10 +150,16 @@ const formatDate = (date) => {
   return dayjs(date).format('YYYY年MM月DD日 HH:mm')
 }
 
+const isSaving = ref(false)
+
 const closeModal = () => {
   showCreateModal.value = false
-  selectedMood.value = 'happy'
-  diaryContent.value = ''
+  setTimeout(() => {
+    // Reset after animation
+    selectedMood.value = 'happy'
+    diaryContent.value = ''
+    isSaving.value = false
+  }, 300)
 }
 
 const saveDiary = async () => {
@@ -164,6 +170,8 @@ const saveDiary = async () => {
     return
   }
 
+  isSaving.value = true
+  
   try {
     await diaryStore.createEntry({
       content: diaryContent.value,
@@ -176,16 +184,25 @@ const saveDiary = async () => {
         icon: '📝'
       })
     }
+    
+    // Explicitly close modal on success
     closeModal()
 
-    // 检查成就
-    await achievementStore.checkAllAchievements()
+    // 检查成就 (non-blocking for UI close)
+    achievementStore.checkAllAchievements().catch(err => {
+      console.warn('Achievement check failed:', err)
+    })
+    
   } catch (error) {
+    console.error('Save diary error:', error)
     if (window.$toast) {
       window.$toast.error('保存失败：' + error.message, {
         title: '❌ 保存失败'
       })
+    } else {
+      alert('保存失败：' + error.message)
     }
+    isSaving.value = false
   }
 }
 
@@ -209,15 +226,10 @@ onMounted(async () => {
 }
 
 .mood-selector-legend {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  font-weight: var(--font-medium);
 }
 
 .diary-view {
@@ -237,21 +249,31 @@ onMounted(async () => {
 .diary-title {
   font-size: var(--font-2xl);
   font-weight: var(--font-bold);
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .create-btn {
   padding: var(--space-sm) var(--space-lg);
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: white;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-weight: var(--font-medium);
   cursor: pointer;
   transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
 }
 
 .create-btn:hover {
-  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.create-btn:active {
+  transform: translateY(0);
 }
 
 /* 统计卡片 */
@@ -267,7 +289,8 @@ onMounted(async () => {
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
   text-align: center;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
 .stat-value {
@@ -296,11 +319,21 @@ onMounted(async () => {
   border-radius: var(--radius-lg);
   display: flex;
   gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition-base);
+}
+
+.diary-card:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .diary-mood {
   font-size: var(--font-3xl);
+  display: flex;
+  align-items: flex-start;
+  padding-top: var(--space-xs);
 }
 
 .diary-content {
@@ -311,6 +344,7 @@ onMounted(async () => {
   font-size: var(--font-xs);
   color: var(--color-text-secondary);
   margin-bottom: var(--space-xs);
+  display: block;
 }
 
 .diary-text {
@@ -323,18 +357,23 @@ onMounted(async () => {
   text-align: center;
   padding: var(--space-3xl);
   color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-xl);
 }
 
 /* 弹窗 */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: var(--z-modal);
   padding: var(--space-md);
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -343,21 +382,48 @@ onMounted(async () => {
   padding: var(--space-xl);
   max-width: 500px;
   width: 100%;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
 }
 
 .modal-title {
   font-size: var(--font-xl);
   font-weight: var(--font-bold);
-  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+.close-icon-btn {
+  background: none;
+  border: none;
+  font-size: var(--font-lg);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--space-xs);
 }
 
 .mood-selector {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--space-lg) 0;
+}
+
+/* 优化后的心情选择器 */
+.mood-scroller {
+  display: flex;
+  flex-wrap: wrap; /* 改为换行布局 */
+  justify-content: center; /* 居中对齐 */
+  gap: var(--space-md);
+  padding: var(--space-xs);
 }
 
 .mood-btn {
@@ -365,70 +431,109 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-sm);
-  background: var(--color-bg-secondary);
-  border: 2px solid transparent;
-  border-radius: var(--radius-md);
+  background: none;
+  border: none;
   cursor: pointer;
+  transition: all var(--transition-base);
+  width: 60px; /* 固定宽度 */
+}
+
+.mood-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-radius: 50%; /* 圆形 */
+  border: 2px solid transparent;
   transition: all var(--transition-base);
 }
 
-.mood-btn:hover {
-  border-color: var(--color-primary);
+.mood-btn:hover .mood-icon-wrapper {
+  transform: scale(1.1);
+  background: white;
 }
 
-.mood-btn.active {
+.mood-btn.active .mood-icon-wrapper {
+  background: var(--color-primary-light);
   border-color: var(--color-primary);
-  background: var(--color-primary);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-cute);
 }
 
 .mood-icon {
-  font-size: var(--font-2xl);
+  font-size: 28px;
 }
 
 .mood-name {
   font-size: var(--font-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-medium);
+  transition: color var(--transition-base);
+}
+
+.mood-btn.active .mood-name {
+  color: var(--color-primary-dark);
+}
+
+.diary-input-area {
+  margin-bottom: var(--space-xl);
 }
 
 .diary-textarea {
   width: 100%;
   padding: var(--space-md);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
   font-size: var(--font-md);
   font-family: inherit;
-  resize: vertical;
-  margin-bottom: var(--space-lg);
+  resize: none; /* 禁止调整大小 */
+  background: var(--color-bg-secondary);
+  transition: all var(--transition-base);
+  color: var(--color-text-primary);
 }
 
 .diary-textarea:focus {
   outline: none;
   border-color: var(--color-primary);
+  background: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .modal-actions {
   display: flex;
-  gap: var(--space-md);
+  justify-content: center;
 }
 
-.cancel-btn,
 .save-btn {
-  flex: 1;
-  padding: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md);
   border: none;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  font-size: var(--font-md);
   cursor: pointer;
-}
-
-.cancel-btn {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-primary);
-}
-
-.save-btn {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: white;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.save-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  filter: brightness(1.1);
+}
+
+.save-btn:not(:disabled):active {
+  transform: translateY(0);
 }
 
 /* 固定底部导航栏 */
@@ -438,5 +543,21 @@ onMounted(async () => {
   left: 0;
   right: 0;
   z-index: var(--z-fixed);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
