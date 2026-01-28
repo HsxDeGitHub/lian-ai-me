@@ -22,37 +22,52 @@
     <!-- 主内容区域 -->
     <div class="scene-content">
       <!-- 顶部状态栏 -->
-      <div class="top-bar">
+      <div class="top-bar" role="banner">
         <!-- 骨头币显示 -->
-        <div class="currency-display">
-          <span class="coin-icon">🦴</span>
+        <div class="currency-display" aria-label="骨头币余额">
+          <span class="coin-icon" aria-hidden="true">🦴</span>
           <span class="coin-amount">{{ currencyStore.balance }}</span>
         </div>
 
         <!-- 设置按钮 -->
-        <router-link to="/profile" class="settings-btn"> ⚙️ </router-link>
+        <router-link
+          to="/profile"
+          class="settings-btn"
+          aria-label="前往个人中心设置"
+          role="button"
+        >
+          <span aria-hidden="true">⚙️</span>
+        </router-link>
       </div>
 
       <!-- 计时器卡片 -->
-      <div class="timer-card animate-fade-in-up">
-        <div class="timer-label">单身时长</div>
-        <div class="timer-display">{{ timeString }}</div>
-        <div class="timer-stats">
-          <div class="stat-item">
-            <span class="stat-icon">🎯</span>
+      <div
+        class="timer-card animate-fade-in-up hover-lift"
+        role="region"
+        aria-labelledby="timer-label"
+      >
+        <div id="timer-label" class="timer-label">单身时长</div>
+        <div class="timer-display" aria-live="polite" aria-atomic="true">{{ timeString }}</div>
+        <div class="timer-stats" role="list">
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">🎯</span>
             <span class="stat-text">{{ singleDays }}天</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-icon">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">{{ dogStore.dogInfo?.icon || "🐕" }}</span>
             <span class="stat-text">{{ dogStore.name }}</span>
+          </div>
+          <div class="stat-item" role="listitem">
+            <span class="stat-icon" aria-hidden="true">💕</span>
+            <span class="stat-text">好感度 {{ dogStore.interactionCount }}</span>
           </div>
         </div>
       </div>
 
       <!-- 狗狗场景 -->
-      <div class="dog-scene">
+      <div class="dog-scene" aria-label="狗狗活动场景">
         <!-- 装饰背景层 -->
-        <div class="scene-decor-layer">
+        <div class="scene-decor-layer" aria-hidden="true">
           <div class="pond">
             <div class="water-reflection"></div>
             <div class="duck">🦆</div>
@@ -61,7 +76,7 @@
         </div>
 
         <!-- 狗屋 (草屋) -->
-        <div class="dog-house cottage-style" :class="`house-level-${dogStore.houseLevel}`">
+        <div class="dog-house cottage-style" :class="`house-level-${dogStore.houseLevel}`" aria-hidden="true">
           <div class="chimney">
             <div class="smoke"></div>
           </div>
@@ -76,7 +91,7 @@
         </div>
 
         <!-- 已放置的家具 -->
-        <div class="placed-furniture">
+        <div class="placed-furniture" role="list" :aria-label="`已放置的家具，共${visibleFurniture.length}件`">
           <div
             v-for="item in visibleFurniture"
             :key="item.instanceId || item.id"
@@ -86,29 +101,44 @@
               left: (item.position?.x || 50) + '%',
               bottom: (item.position?.y || 10) + '%'
             }"
+            role="listitem"
+            :aria-label="`${item.name}，${item.description || ''}`"
           >
             {{ item.icon }}
           </div>
         </div>
 
         <!-- 狗狗 -->
-        <div
-          class="dog-character"
+        <button
+          class="dog-character hover-scale"
           :class="dogAnimationClass"
           @click="interactWithDog"
+          :aria-label="`和${dogStore.name}互动，当前心情：${moodText}`"
+          :title="`点击和${dogStore.name}互动`"
         >
-          <div class="dog-emoji">{{ dogStore.dogInfo?.emoji || "🐶" }}</div>
+          <div class="dog-emoji" aria-hidden="true">{{ dogStore.dogInfo?.emoji || "🐶" }}</div>
           <div
-            class="dog-mood-indicator"
+            class="dog-mood-indicator animate-pulse-glow"
             :style="{ backgroundColor: dogStore.moodInfo?.color }"
+            :aria-label="`${dogStore.name}的心情指示器`"
           ></div>
           <!-- 心形效果 -->
-          <div class="heart-float" v-if="showHeart">💕</div>
-        </div>
+          <div class="heart-float animate-fade-in-slide" v-if="showHeart" aria-hidden="true">💕</div>
+          <!-- 装饰品 -->
+          <div v-if="dogStore.accessories.length > 0" class="dog-accessories" aria-hidden="true">
+            <span
+              v-for="accessory in dogStore.accessories"
+              :key="accessory.id"
+              class="accessory-item"
+            >
+              {{ accessory.icon }}
+            </span>
+          </div>
+        </button>
 
         <!-- 狗狗状态 -->
-        <div class="dog-status">
-          <div class="energy-bar">
+        <div class="dog-status" role="status" aria-live="polite">
+          <div class="energy-bar" role="progressbar" :aria-valuenow="dogStore.energy" aria-valuemin="0" aria-valuemax="100" :aria-label="`${dogStore.name}的活力值：${dogStore.energy}%`">
             <div
               class="energy-fill"
               :style="{ width: dogStore.energy + '%' }"
@@ -119,25 +149,47 @@
       </div>
 
       <!-- 快捷操作 -->
-      <div class="quick-actions">
-        <button @click="openDiary" class="action-btn">
-          <span class="action-icon">📝</span>
+      <div class="quick-actions" role="group" aria-label="快捷操作">
+        <button
+          @click="openDiary"
+          class="action-btn"
+          :aria-label="`打开日记，记录当前心情`"
+        >
+          <span class="action-icon" aria-hidden="true">📝</span>
           <span class="action-label">记心情</span>
         </button>
-        <button @click="goToTasks" class="action-btn">
-          <span class="action-icon">⭐</span>
+        <button
+          @click="goToTasks"
+          class="action-btn"
+          aria-label="查看并完成任务，获取奖励"
+        >
+          <span class="action-icon" aria-hidden="true">⭐</span>
           <span class="action-label">做任务</span>
         </button>
-        <button @click="goToShop" class="action-btn">
-          <span class="action-icon">🛒</span>
+        <button
+          @click="goToShop"
+          class="action-btn"
+          aria-label="前往商店购买物品和食物"
+        >
+          <span class="action-icon" aria-hidden="true">🛒</span>
           <span class="action-label">逛商店</span>
         </button>
-        <button @click="goToRoomDecorator" class="action-btn highlight-btn">
-          <span class="action-icon">🏡</span>
+        <button
+          @click="goToRoomDecorator"
+          class="action-btn highlight-btn"
+          aria-label="布置小屋，放置家具和装饰"
+        >
+          <span class="action-icon" aria-hidden="true">🏡</span>
           <span class="action-label">布置小屋</span>
         </button>
       </div>
     </div>
+
+    <!-- 狗狗互动面板 -->
+    <DogInteractionModal
+      :show="showInteractionModal"
+      @close="closeInteractionModal"
+    />
   </div>
 </template>
 
@@ -149,6 +201,8 @@ import { useTimerStore } from "@/stores/timer";
 import { useDogStore } from "@/stores/dog";
 import { useCurrencyStore } from "@/stores/currency";
 import { useRoomStore } from "@/stores/room";
+import DogInteractionModal from "@/components/dog/DogInteractionModal.vue";
+import { useTimer } from "@/composables/useTimer";
 import dayjs from "dayjs";
 
 const router = useRouter();
@@ -161,6 +215,7 @@ const roomStore = useRoomStore();
 // 场景状态
 const isDay = ref(true);
 const showHeart = ref(false);
+const showInteractionModal = ref(false);
 
 // 用于强制更新的响应式变量
 const timerKey = ref(0);
@@ -248,12 +303,12 @@ const getQualityClass = (rarity) => {
 
 // 方法
 const interactWithDog = () => {
-  dogStore.interact("pet");
-  // 显示心形效果
-  showHeart.value = true;
-  setTimeout(() => {
-    showHeart.value = false;
-  }, 1000);
+  // 打开互动面板
+  showInteractionModal.value = true;
+};
+
+const closeInteractionModal = () => {
+  showInteractionModal.value = false;
 };
 
 const openDiary = () => {
@@ -272,21 +327,15 @@ const goToRoomDecorator = () => {
   router.push("/room");
 };
 
-// 定时更新
-let timerInterval = null;
+// 使用 useTimer composable，自动清理定时器
+const { start: startTimer } = useTimer(() => {
+  // 每秒触发响应式更新
+  timerKey.value++;
+  timerStore.checkMilestones();
+}, 1000);
 
 onMounted(() => {
-  // 每秒更新计时器
-  timerInterval = setInterval(() => {
-    timerKey.value++; // 强制触发响应式更新
-    timerStore.checkMilestones();
-  }, 1000);
-});
-
-onUnmounted(() => {
-  if (timerInterval) {
-    clearInterval(timerInterval);
-  }
+  startTimer();
 });
 </script>
 
@@ -884,6 +933,29 @@ onUnmounted(() => {
   position: relative;
 }
 
+/* 装饰品样式 */
+.dog-accessories {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: flex;
+  gap: 4px;
+}
+
+.accessory-item {
+  font-size: 24px;
+  animation: soft-float 3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.accessory-item:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.accessory-item:nth-child(3) {
+  animation-delay: 2s;
+}
+
 /* 可爱眨眼动画 */
 .dog-emoji::after {
   content: "";
@@ -923,11 +995,12 @@ onUnmounted(() => {
 }
 
 .dog-mood-indicator {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  margin: 8px auto 0;
-  box-shadow: 0 0 10px currentColor;
+  margin: 12px auto 0;
+  box-shadow: 0 0 15px currentColor;
+  border: 3px solid rgba(255, 255, 255, 0.8);
 }
 
 .dog-status {
@@ -1005,13 +1078,13 @@ onUnmounted(() => {
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-lg) var(--space-md);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
   border-radius: var(--radius-xl);
-  border: 2px solid rgba(255, 182, 193, 0.25);
+  border: 2px solid rgba(255, 182, 193, 0.3);
   cursor: pointer;
-  box-shadow: var(--shadow-cute);
-  transition: all var(--transition-bounce);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
 }
@@ -1026,10 +1099,10 @@ onUnmounted(() => {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.5),
     transparent
   );
-  transition: left 0.5s;
+  transition: left var(--transition-base);
 }
 
 .action-btn:hover::before {
@@ -1037,13 +1110,13 @@ onUnmounted(() => {
 }
 
 .action-btn:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(255, 140, 148, 0.25);
   border-color: var(--color-cute-pink);
 }
 
 .action-btn:active {
-  transform: translateY(-2px) scale(0.98);
+  transform: translateY(-3px) scale(0.98);
 }
 
 .action-icon {
