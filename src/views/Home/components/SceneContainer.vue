@@ -340,23 +340,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Main Scene - Premium Update */
 .scene-container {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  transition: background 1s ease;
+  transition: background 1.5s ease-in-out;
 }
 
 .scene-container.day-scene {
-  background: linear-gradient(
-    180deg,
-    #FFDEE9 0%,
-    #B5FFFC 100%
-  );
+  background: var(--gradient-modern-bg);
 }
 
 .scene-container.night-scene {
-  background: linear-gradient(180deg, #09203F 0%, #537895 100%);
+  background: linear-gradient(180deg, #1a2980 0%, #26d0ce 100%);
 }
 
 /* 背景装饰 */
@@ -369,15 +366,15 @@ onMounted(() => {
 
 .sun {
   position: absolute;
-  top: 40px;
-  right: 40px;
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #ffe066, #ffb347);
+  top: 5%;
+  right: 10%;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 30% 30%, #fff7e6, #ffd93d);
   border-radius: 50%;
-  box-shadow: 0 0 80px rgba(255, 217, 61, 0.5),
-    0 0 120px rgba(255, 179, 71, 0.3);
-  animation: breathe 2.5s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(255, 217, 61, 0.6), 0 0 80px rgba(255, 179, 71, 0.4);
+  animation: breathe 4s ease-in-out infinite;
+  z-index: 10;
 }
 
 .sun::before {
@@ -386,19 +383,20 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 40px;
+  font-size: 48px;
+  opacity: 0.8;
 }
 
 .moon {
   position: absolute;
-  top: 40px;
-  right: 40px;
-  width: 55px;
-  height: 55px;
-  background: linear-gradient(135deg, #fffacd, #f5f5f5);
+  top: 5%;
+  right: 10%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #f0f0f0);
   border-radius: 50%;
-  box-shadow: 0 0 60px rgba(255, 250, 205, 0.5),
-    0 0 100px rgba(245, 245, 245, 0.3);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.4);
+  z-index: 10;
 }
 
 .moon::before {
@@ -407,7 +405,7 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 35px;
+  font-size: 40px;
 }
 
 /* 可爱装饰元素 */
@@ -422,94 +420,41 @@ onMounted(() => {
   font-size: 24px;
   opacity: 0.6;
   animation: float-up 8s ease-in-out infinite;
+  filter: blur(0.5px);
 }
 
-.deco-1 {
-  top: 20%;
-  left: 10%;
-  animation-delay: 0s;
-}
-.deco-2 {
-  top: 60%;
-  left: 5%;
-  animation-delay: 2s;
-  font-size: 18px;
-}
-.deco-3 {
-  top: 30%;
-  right: 15%;
-  animation-delay: 1s;
-}
-.deco-4 {
-  top: 70%;
-  right: 10%;
-  animation-delay: 3s;
-  font-size: 20px;
-}
-.deco-5 {
-  top: 15%;
-  left: 30%;
-  animation-delay: 4s;
-  font-size: 16px;
-}
+.deco-1 { top: 20%; left: 10%; animation-delay: 0s; font-size: 28px; }
+.deco-2 { top: 60%; left: 5%; animation-delay: 2s; font-size: 20px; }
+.deco-3 { top: 30%; right: 15%; animation-delay: 1s; font-size: 24px; }
+.deco-4 { top: 70%; right: 10%; animation-delay: 3s; font-size: 22px; }
+.deco-5 { top: 15%; left: 30%; animation-delay: 4s; font-size: 18px; }
 
 @keyframes float-up {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.4;
-  }
-  50% {
-    transform: translateY(-15px) rotate(10deg);
-    opacity: 0.7;
-  }
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { transform: translateY(-20px) rotate(10deg); opacity: 0.7; }
 }
 
 .clouds {
   position: absolute;
   inset: 0;
+  opacity: 0.8;
 }
 
 .cloud {
   position: absolute;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50px;
-  animation: float 20s linear infinite;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 100px;
+  animation: float 40s linear infinite;
+  backdrop-filter: blur(5px);
 }
 
-.cloud-1 {
-  width: 100px;
-  height: 40px;
-  top: 15%;
-  left: -100px;
-  animation-duration: 25s;
-}
-
-.cloud-2 {
-  width: 80px;
-  height: 30px;
-  top: 25%;
-  left: -80px;
-  animation-duration: 30s;
-  animation-delay: 5s;
-}
-
-.cloud-3 {
-  width: 120px;
-  height: 50px;
-  top: 10%;
-  left: -120px;
-  animation-duration: 35s;
-  animation-delay: 10s;
-}
+.cloud-1 { width: 140px; height: 50px; top: 15%; left: -140px; animation-duration: 45s; }
+.cloud-2 { width: 100px; height: 40px; top: 25%; left: -100px; animation-duration: 35s; animation-delay: 5s; }
+.cloud-3 { width: 180px; height: 70px; top: 10%; left: -180px; animation-duration: 55s; animation-delay: 10s; }
 
 @keyframes float {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(100vw + 200px));
-  }
+  from { transform: translateX(-200px); }
+  to { transform: translateX(calc(100vw + 200px)); }
 }
 
 /* 主内容 */
@@ -517,7 +462,9 @@ onMounted(() => {
   position: relative;
   z-index: 1;
   padding: var(--space-lg);
-  padding-bottom: 100px;
+  padding-bottom: 120px; /* Space for floating navbar */
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* 顶部状态栏 */
@@ -532,13 +479,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
-  padding: var(--space-sm) var(--space-md);
+  background: var(--glass-heavy-bg);
+  backdrop-filter: var(--glass-heavy-backdrop);
+  padding: 8px 16px;
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   border: var(--glass-border);
-  transition: all var(--transition-base);
+  transition: all var(--transition-bounce);
 }
 
 .currency-display:hover {
@@ -548,7 +495,7 @@ onMounted(() => {
 
 .coin-icon {
   font-size: var(--font-xl);
-  animation: wiggle 2s ease-in-out infinite;
+  animation: wiggle 3s ease-in-out infinite;
 }
 
 .coin-amount {
@@ -561,38 +508,45 @@ onMounted(() => {
 }
 
 .settings-btn {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
+  background: var(--glass-heavy-bg);
+  backdrop-filter: var(--glass-heavy-backdrop);
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   border: var(--glass-border);
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
   text-decoration: none;
   transition: all var(--transition-bounce);
+  color: var(--color-text-secondary);
 }
 
 .settings-btn:hover {
   transform: rotate(90deg) scale(1.1);
-  box-shadow: var(--shadow-glow);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-cute);
 }
 
 /* 计时器卡片 */
 .timer-card {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: var(--glass-backdrop);
   border-radius: var(--radius-2xl);
   padding: var(--space-xl) var(--space-lg);
-  margin-bottom: var(--space-xl);
-  box-shadow: var(--shadow-glass);
+  margin-bottom: var(--space-2xl);
+  box-shadow: var(--shadow-cute);
   text-align: center;
   border: var(--glass-border);
   position: relative;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.timer-card:hover {
+  transform: translateY(-5px);
 }
 
 .timer-card::before {
@@ -602,80 +556,66 @@ onMounted(() => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 182, 193, 0.1),
-    transparent
-  );
-  animation: shine 3s ease-in-out infinite;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: shine 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes shine {
-  0% {
-    transform: translateX(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(45deg);
-  }
+  0% { transform: translateX(-150%) rotate(45deg); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateX(150%) rotate(45deg); opacity: 0; }
 }
 
 .timer-label {
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-sm);
-  letter-spacing: 2px;
-  position: relative;
+  margin-bottom: var(--space-xs);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: var(--font-bold);
+  opacity: 0.7;
 }
 
 .timer-display {
-  font-size: clamp(24px, 6vw, 36px);
-  font-weight: var(--font-bold);
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-cute-pink-dark),
-    var(--color-primary)
-  );
+  font-size: clamp(28px, 8vw, 42px);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
   margin-bottom: var(--space-md);
-  line-height: 1.3;
-  position: relative;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
 }
 
 .timer-stats {
   display: flex;
   justify-content: center;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   flex-wrap: wrap;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  background: rgba(255, 182, 193, 0.15);
-  padding: var(--space-xs) var(--space-md);
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 6px 12px;
   border-radius: var(--radius-full);
+  border: 1px solid rgba(255,255,255,0.5);
 }
 
-.stat-icon {
-  font-size: var(--font-lg);
-}
-
+.stat-icon { font-size: 16px; }
 .stat-text {
-  font-size: var(--font-sm);
-  font-weight: var(--font-semibold);
-  color: var(--color-text-primary);
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
+  color: var(--color-text-secondary);
 }
 
-/* 狗狗场景 */
 /* 狗狗场景 */
 .dog-scene {
   position: relative;
-  height: 350px;
+  height: 380px; /* Taller scene */
   margin-bottom: var(--space-xl);
   perspective: 1000px;
 }
@@ -690,39 +630,40 @@ onMounted(() => {
 
 .pond {
   position: absolute;
-  bottom: 20px;
+  bottom: 25px;
   right: 15%;
   width: 140px;
   height: 60px;
-  background: linear-gradient(180deg, #A2E1FA, #45B7D1);
+  background: linear-gradient(180deg, #a2e1fa, #45b7d1);
+  -webkit-background-clip: border-box; /* Standard property for compatibility if needed, though usually for text */
+  background-clip: border-box;
   border-radius: 50%;
-  box-shadow: inset 0 0 20px rgba(0, 50, 100, 0.1), 0 5px 15px rgba(162, 225, 250, 0.4);
-  border: 4px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.1), 0 5px 15px rgba(162, 225, 250, 0.4);
+  border: 4px solid rgba(255, 255, 255, 0.6);
   overflow: hidden;
 }
 
 .water-reflection {
   position: absolute;
   top: 10px;
-  left: 10px;
-  width: 40%;
-  height: 30%;
+  left: 15px;
+  width: 40px;
+  height: 20px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
-  transform: rotate(-15deg);
+  transform: rotate(-10deg);
 }
 
 .duck {
   position: absolute;
-  bottom: 15px;
-  right: 30px;
   font-size: 20px;
-  animation: float-duck 5s ease-in-out infinite alternate;
+  animation: float-duck 6s ease-in-out infinite alternate;
 }
 
 @keyframes float-duck {
-  0% { transform: translateX(0) rotate(0deg); }
-  100% { transform: translateX(10px) rotate(5deg); }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(40px, 10px) rotate(5deg); }
+  100% { transform: translate(10px, 5px) rotate(-5deg); }
 }
 
 .grass-patch {
@@ -730,71 +671,53 @@ onMounted(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40px;
-  background: radial-gradient(ellipse at center, rgba(143, 218, 154, 0.6) 0%, transparent 70%);
+  height: 60px;
+  background: radial-gradient(ellipse at center, rgba(143, 218, 154, 0.4) 0%, transparent 80%);
   z-index: -1;
+  filter: blur(10px);
 }
 
 .dog-house {
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 20%;
   transform: translateX(-20%);
-  text-align: center;
   z-index: 10;
   transition: all 0.3s ease;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
 }
 
 .dog-house:hover {
-  transform: translateX(-20%) scale(1.05);
+  transform: translateX(-20%) scale(1.05) rotate(-2deg);
 }
 
-/* 小木屋风格 */
 .cottage-roof {
-  width: 160px;
+  width: 150px;
   height: 80px;
-  background: #deb887; /* Sandy brown base */
-  border-radius: 12px;
+  background: #e6b89c;
+  border-radius: 20px 20px 4px 4px;
   position: relative;
   z-index: 2;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  overflow: hidden;
+  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1);
 }
 
 .roof-texture {
   position: absolute;
-  inset: -10px;
-  background: 
-    radial-gradient(circle at 10px 10px, #8B4513 2px, transparent 2.5px),
-    linear-gradient(135deg, #d4a574 25%, transparent 25%) -50px 0,
-    linear-gradient(225deg, #d4a574 25%, transparent 25%) -50px 0,
-    linear-gradient(315deg, #d4a574 25%, transparent 25%),
-    linear-gradient(45deg, #d4a574 25%, transparent 25%);
+  inset: 0;
+  opacity: 0.1;
+  background-image: linear-gradient(45deg, #8b4513 25%, transparent 25%, transparent 50%, #8b4513 50%, #8b4513 75%, transparent 75%, transparent);
   background-size: 20px 20px;
-  background-color: #DEB887;
-  transform: rotate(45deg);
 }
 
-.cottage-roof::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 10px;
-  background: rgba(107, 203, 119, 0.6); /* Grass on roof */
-  border-radius: 12px 12px 0 0;
-}
-
-.house-body.cottage-body {
-  background: #FFF8DC;
-  width: 130px;
-  height: 90px;
-  margin: -10px auto 0;
-  border-radius: 0 0 8px 8px;
+.cottage-body {
+  background: #fff8e7;
+  width: 120px;
+  height: 80px;
+  margin: -5px auto 0;
+  border-radius: 0 0 12px 12px;
   position: relative;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  border: 2px solid #DEB887;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+  border: 2px solid #e6b89c;
 }
 
 .house-door {
@@ -802,407 +725,182 @@ onMounted(() => {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 44px;
-  height: 65px;
-  background: #8B4513;
-  border-radius: 24px 24px 0 0;
-  box-shadow: inset 1px -1px 4px rgba(255,255,255,0.2);
-}
-
-.house-door::after {
-  content: '';
-  position: absolute;
-  top: 35px;
-  right: 6px;
-  width: 6px;
-  height: 6px;
-  background: #FFD700;
-  border-radius: 50%;
-  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+  width: 40px;
+  height: 55px;
+  background: #8b5e3c;
+  border-radius: 20px 20px 0 0;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
 }
 
 .house-window {
   position: absolute;
   top: 20px;
   left: 15px;
-  width: 30px;
-  height: 30px;
-  background: #A2E1FA;
-  border: 3px solid #8B4513;
+  width: 24px;
+  height: 24px;
+  background: #b5eaff;
+  border: 4px solid #e6b89c;
   border-radius: 50%;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.house-window::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #8B4513;
-  transform: translateY(-50%);
-}
-
-.house-window::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: #8B4513;
-  transform: translateX(-50%);
 }
 
 .chimney {
   position: absolute;
   top: -20px;
-  right: 20px;
-  width: 20px;
-  height: 40px;
-  background: #CD5C5C;
-  z-index: 1;
+  right: 25px;
+  width: 18px;
+  height: 35px;
+  background: #cd7f32;
+  border-radius: 4px;
 }
 
 .smoke {
   position: absolute;
-  top: -10px;
+  top: -15px;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  width: 12px;
+  height: 12px;
+  background: rgba(255,255,255,0.8);
   border-radius: 50%;
-  animation: float-up 3s ease-out infinite;
+  animation: float-up 2.5s ease-out infinite;
 }
 
-.vines {
-  position: absolute;
-  bottom: 30px;
-  right: -10px;
-  font-size: 20px;
-  transform: rotate(15deg);
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-}
-
+/* 狗狗和互动 */
 .dog-character {
   position: absolute;
   bottom: 50px;
-  left: 65%; /* Move dog slightly to the right to balance the house */
+  left: 65%;
   transform: translateX(-50%);
   cursor: pointer;
-  transition: transform var(--transition-base);
   z-index: 20;
+  transition: transform var(--transition-bounce);
 }
 
 .dog-character:hover {
-  transform: translateX(-50%) scale(1.1);
-}
-
-/* 心形浮动效果 */
-.heart-float {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 32px;
-  animation: heart-float-up 1s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes heart-float-up {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-30px) scale(1.2);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-60px) scale(1);
-  }
+  transform: translateX(-50%) translateY(-5px) scale(1.1);
 }
 
 .dog-emoji {
-  font-size: 120px;
-  display: block;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
-  animation: cute-bounce 2s ease-in-out infinite;
-  position: relative;
-}
-
-/* 装饰品样式 */
-.dog-accessories {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  display: flex;
-  gap: 4px;
-}
-
-.accessory-item {
-  font-size: 24px;
-  animation: soft-float 3s ease-in-out infinite;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.accessory-item:nth-child(2) {
-  animation-delay: 1s;
-}
-
-.accessory-item:nth-child(3) {
-  animation-delay: 2s;
-}
-
-/* 可爱眨眼动画 */
-.dog-emoji::after {
-  content: "";
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  animation: blink 4s ease-in-out infinite;
-}
-
-@keyframes cute-bounce {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-10px) scale(1.05);
-  }
-}
-
-@keyframes blink {
-  0%,
-  45%,
-  55%,
-  100% {
-    transform: translateX(-50%) scaleY(1);
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(-50%) scaleY(0.1);
-    opacity: 0.5;
-  }
+  font-size: 100px;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+  animation: cute-bounce 3s ease-in-out infinite;
 }
 
 .dog-mood-indicator {
-  width: 24px;
-  height: 24px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  margin: 12px auto 0;
-  box-shadow: 0 0 15px currentColor;
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  margin: 5px auto 0;
+  border: 2px solid white;
+  box-shadow: 0 0 10px currentColor;
 }
 
 .dog-status {
   position: absolute;
-  bottom: 0;
+  bottom: -40px;
   left: 50%;
   transform: translateX(-50%);
+  width: 180px;
   text-align: center;
-  width: 200px;
-}
-
-/* 已放置的家具 */
-.placed-furniture {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.furniture-item {
-  position: absolute;
-  transform: translate(-50%, 50%);
-  font-size: clamp(24px, 5vw, 36px);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  pointer-events: none;
-}
-
-.furniture-item.quality-common {
-  filter: drop-shadow(0 0 2px rgba(168, 180, 192, 0.5));
-}
-
-.furniture-item.quality-rare {
-  filter: drop-shadow(0 0 4px rgba(107, 179, 224, 0.5));
-}
-
-.furniture-item.quality-epic {
-  filter: drop-shadow(0 0 6px rgba(184, 141, 214, 0.5));
-}
-
-.furniture-item.quality-legendary {
-  filter: drop-shadow(0 0 8px rgba(255, 183, 77, 0.5));
-  animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), sparkle 2s ease-in-out infinite;
 }
 
 .energy-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: var(--radius-full);
+  height: 6px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 10px;
   overflow: hidden;
-  margin-bottom: var(--space-xs);
+  margin-bottom: 4px;
 }
 
 .energy-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6bcb77, #ffd93d);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #8fda9a, #4ecdc4);
+  border-radius: 10px;
 }
 
 .status-text {
-  font-size: var(--font-sm);
+  font-size: 10px;
   color: var(--color-text-secondary);
+  font-weight: bold;
 }
 
-/* 快捷操作 */
+/* 快捷操作区 */
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-md);
+  margin-top: -20px; /* Overlap slightly */
+  position: relative;
+  z-index: 30;
 }
 
 .action-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-lg) var(--space-md);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-radius: var(--radius-xl);
-  border: 2px solid rgba(255, 182, 193, 0.3);
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.action-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.5),
-    transparent
-  );
-  transition: left var(--transition-base);
-}
-
-.action-btn:hover::before {
-  left: 100%;
+  gap: 8px;
+  padding: 16px 8px;
+  background: var(--glass-heavy-bg);
+  backdrop-filter: var(--glass-heavy-backdrop);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .action-btn:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 12px 32px rgba(255, 140, 148, 0.25);
-  border-color: var(--color-cute-pink);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(255, 140, 148, 0.2);
+  border-color: var(--color-primary-light);
+  background: white;
 }
 
 .action-btn:active {
-  transform: translateY(-3px) scale(0.98);
+  transform: translateY(-4px) scale(0.98);
 }
 
 .action-icon {
-  font-size: 36px;
-  transition: transform var(--transition-base);
-}
-
-.action-btn:hover .action-icon {
-  animation: wiggle 0.5s ease-in-out;
+  font-size: 32px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 
 .action-label {
-  font-size: var(--font-sm);
-  font-weight: var(--font-semibold);
+  font-size: 11px;
   color: var(--color-text-primary);
+  font-weight: 700;
 }
 
-/* 布置小屋按钮高亮样式 */
-.action-btn.highlight-btn {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 140, 66, 0.1),
-    rgba(255, 182, 193, 0.1)
-  );
-  border-color: var(--color-primary);
+.highlight-btn {
+  background: linear-gradient(135deg, #fff0f5, #fff);
+  border: 1px solid var(--color-primary-light);
 }
 
-.action-btn.highlight-btn:hover {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-cute-pink)
-  );
-  border-color: transparent;
-}
-
-.action-btn.highlight-btn:hover .action-label {
-  color: white;
+.highlight-btn:hover {
+  background: linear-gradient(135deg, #fff, #fff0f5);
 }
 
 /* Mobile optimizations */
 @media (max-width: 480px) {
   .scene-content {
     padding: var(--space-md);
-    padding-bottom: 100px;
+    padding-bottom: 110px;
   }
-
-  .timer-card {
-    padding: var(--space-lg) var(--space-md);
-  }
-
-  .timer-display {
-    font-size: 24px;
-  }
-
+  
+  .timer-display { font-size: 28px; }
+  
   .quick-actions {
-    gap: var(--space-sm);
+    gap: 8px;
   }
-
+  
   .action-btn {
-    padding: var(--space-md) var(--space-sm);
+    padding: 12px 4px;
+    border-radius: 16px;
   }
-
-  .action-icon {
-    font-size: 28px;
-  }
-
-  .action-label {
-    font-size: var(--font-xs);
-  }
-
-  .dog-emoji {
-    font-size: 90px;
-  }
-
-  .dog-scene {
-    height: 240px;
-  }
-
-  .house-roof {
-    font-size: 60px;
-  }
-
-  .house-body {
-    width: 120px;
-    height: 80px;
-  }
+  
+  .action-icon { font-size: 26px; }
+  .action-label { font-size: 10px; transform: scale(0.9); }
+  
+  .dog-scene { height: 320px; }
+  .dog-emoji { font-size: 80px; }
 }
 </style>

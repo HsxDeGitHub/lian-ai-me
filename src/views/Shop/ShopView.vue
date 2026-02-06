@@ -157,80 +157,78 @@ const purchaseItem = async (item) => {
 <style scoped>
 .shop-page {
   min-height: 100vh;
-  background: var(--color-bg-primary);
   padding: var(--space-lg);
-  padding-bottom: 100px;
+  padding-bottom: 120px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 /* ========== 顶部导航 ========== */
 .page-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--space-md);
   margin-bottom: var(--space-xl);
-  padding: var(--space-md) var(--space-lg);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
-  border-radius: var(--radius-xl);
+  padding: 12px 20px;
+  background: var(--glass-heavy-bg);
+  backdrop-filter: var(--glass-heavy-backdrop);
+  border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   border: var(--glass-border);
   position: sticky;
-  top: 0;
-  z-index: 10;
+  top: var(--space-md);
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.page-header:hover {
+  box-shadow: var(--shadow-glass);
+  transform: translateY(-2px);
 }
 
 .currency-card {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  background: linear-gradient(135deg, rgba(255, 140, 148, 0.15), rgba(255, 182, 193, 0.1));
-  backdrop-filter: var(--glass-backdrop);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 2px solid rgba(255, 140, 148, 0.3);
-  transition: all 0.2s ease;
-}
-
-.currency-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 140, 148, 0.25);
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(255, 140, 148, 0.1), rgba(255, 182, 193, 0.1));
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid rgba(255, 140, 148, 0.2);
 }
 
 .coin-icon {
-  font-size: var(--font-xl);
+  font-size: 20px;
   animation: coin-bounce 2s ease-in-out infinite;
 }
 
 @keyframes coin-bounce {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-3px) rotate(-5deg); }
-  75% { transform: translateY(-3px) rotate(5deg); }
+  50% { transform: translateY(-3px) rotate(10deg); }
 }
 
 .coin-amount {
-  font-size: var(--font-lg);
-  font-weight: var(--font-bold);
-  background: linear-gradient(135deg, #FF8C94, #FF6B7A);
+  font-size: var(--font-md);
+  font-weight: 800;
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .shop-title {
-  font-size: var(--font-xl);
-  font-weight: var(--font-bold);
-  text-align: center;
+  font-size: var(--font-lg);
+  font-weight: 800;
+  margin: 0;
   background: var(--gradient-rainbow);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
+  letter-spacing: 1px;
 }
 
 .header-spacer {
-  width: 80px;
+  width: 60px; /* Balance the layout */
 }
 
 /* ========== 分类标签 ========== */
@@ -240,54 +238,54 @@ const purchaseItem = async (item) => {
 
 .category-list {
   display: flex;
-  gap: var(--space-sm);
+  gap: 12px;
   overflow-x: auto;
-  padding: var(--space-xs);
+  padding: 4px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .category-list::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
 }
 
 .category-chip {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
+  gap: 6px;
+  padding: 8px 16px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-backdrop);
-  border: 2px solid transparent;
-  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius-full);
   font-size: var(--font-sm);
-  font-weight: var(--font-semibold);
+  font-weight: var(--font-bold);
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all var(--transition-bounce);
   white-space: nowrap;
   scroll-snap-align: start;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
 .category-chip:hover {
-  border-color: rgba(255, 140, 148, 0.4);
-  background: rgba(255, 140, 148, 0.1);
-  transform: translateY(calc(var(--hover-translate-y) / 2));
-  box-shadow: 0 4px 12px rgba(255, 140, 148, 0.2);
+  transform: translateY(-2px);
+  background: white;
+  box-shadow: 0 6px 15px rgba(255, 140, 148, 0.2);
+  color: var(--color-primary);
 }
 
 .category-chip.active {
   background: var(--gradient-primary);
-  color: var(--color-text-white);
+  color: white;
   border-color: transparent;
-  box-shadow: 0 4px 16px rgba(255, 140, 148, 0.4);
-  transform: translateY(calc(var(--hover-translate-y) / 2));
+  box-shadow: 0 6px 20px rgba(255, 140, 148, 0.4);
+  transform: translateY(-2px) scale(1.05);
 }
 
 .chip-icon {
-  font-size: var(--font-lg);
+  font-size: 16px;
 }
 
 /* ========== 商品网格 ========== */
@@ -297,368 +295,222 @@ const purchaseItem = async (item) => {
 
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--space-md);
 }
 
 .shop-item-card {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-backdrop);
-  border-radius: var(--radius-xl);
-  padding: var(--space-md);
+  border-radius: 20px;
+  padding: 12px;
   box-shadow: var(--shadow-sm);
   border: var(--glass-border);
-  transition: all var(--transition-base);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
-}
-
-.shop-item-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--gradient-rainbow);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
-.shop-item-card:hover::before {
-  opacity: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .shop-item-card:hover {
-  transform: translateY(var(--hover-translate-y));
-  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  z-index: 1;
 }
 
 .shop-item-card.owned {
-  opacity: 0.75;
-  filter: grayscale(0.3);
+  opacity: 0.8;
 }
 
 /* 稀有度边框样式 */
-.shop-item-card.quality-common {
-  border-color: #e0e0e0;
-}
-
-.shop-item-card.quality-rare {
-  border-color: #81d4fa;
-  background: linear-gradient(145deg, #e1f5fe, #ffffff);
-}
-
-.shop-item-card.quality-epic {
-  border-color: #ce93d8;
-  background: linear-gradient(145deg, #f3e5f5, #ffffff);
-}
-
-.shop-item-card.quality-legendary {
-  border-color: #ffd54f;
-  background: linear-gradient(145deg, #fffde7, #ffffff);
-}
+.shop-item-card.quality-common { border-color: rgba(189, 195, 199, 0.5); }
+.shop-item-card.quality-rare { border-color: rgba(129, 212, 250, 0.5); background: linear-gradient(160deg, rgba(255,255,255,0.9), rgba(225, 245, 254, 0.6)); }
+.shop-item-card.quality-epic { border-color: rgba(206, 147, 216, 0.5); background: linear-gradient(160deg, rgba(255,255,255,0.9), rgba(243, 229, 245, 0.6)); }
+.shop-item-card.quality-legendary { border-color: rgba(255, 213, 79, 0.6); background: linear-gradient(160deg, rgba(255,255,255,0.9), rgba(255, 253, 231, 0.6)); }
 
 /* 物品展示区 */
 .item-display {
   position: relative;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-md);
-  padding: var(--space-md);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 12px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .item-icon-wrapper {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .item-emoji {
-  font-size: 48px;
-  display: block;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-  transition: transform 0.3s ease;
+  font-size: 56px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .shop-item-card:hover .item-emoji {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.2) rotate(10deg);
 }
 
 /* 稀有度光效 */
 .rarity-glow {
   position: absolute;
-  inset: -8px;
+  inset: -20px;
   border-radius: 50%;
-  opacity: 0.3;
+  opacity: 0;
   pointer-events: none;
-  animation: glow-pulse 2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+  filter: blur(20px);
 }
 
-.rarity-glow.rare {
-  background: radial-gradient(circle, rgba(129, 212, 250, 0.4), transparent);
-}
+.shop-item-card:hover .rarity-glow { opacity: 0.6; }
+.rarity-glow.rare { background: #81d4fa; }
+.rarity-glow.epic { background: #ce93d8; }
+.rarity-glow.legendary { background: #ffe082; opacity: 0.4; animation: rotate-glow 4s linear infinite; }
 
-.rarity-glow.epic {
-  background: radial-gradient(circle, rgba(206, 147, 216, 0.4), transparent);
-}
-
-.rarity-glow.legendary {
-  background: radial-gradient(circle, rgba(255, 213, 79, 0.5), transparent);
-  animation: legendary-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes glow-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.1); opacity: 0.5; }
-}
-
-@keyframes legendary-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.4;
-    box-shadow: 0 0 20px rgba(255, 213, 79, 0.6);
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 0.7;
-    box-shadow: 0 0 30px rgba(255, 213, 79, 0.9);
-  }
+@keyframes rotate-glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* 已拥有标签 */
 .owned-badge {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  background: var(--gradient-secondary);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 2;
 }
 
-/* 物品详情 */
-.item-details {
-  text-align: center;
-}
+/* 物品信息 */
+.item-details { flex: 1; display: flex; flex-direction: column; }
 
 .item-name {
   font-size: var(--font-md);
-  font-weight: var(--font-bold);
+  font-weight: 700;
   color: var(--color-text-primary);
-  margin: 0 0 var(--space-xs) 0;
-  line-height: 1.3;
+  margin: 0 0 4px 0;
 }
 
 .item-desc {
-  font-size: var(--font-sm);
+  font-size: 11px;
   color: var(--color-text-secondary);
-  margin: 0 0 var(--space-md) 0;
-  line-height: 1.5;
-  min-height: 36px;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  height: 32px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2; /* Standard property */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 /* 购买区域 */
 .item-action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
   margin-top: auto;
+  display: flex;
+  gap: 8px;
 }
 
 .price-tag {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  background: linear-gradient(135deg, rgba(255, 140, 148, 0.15), rgba(255, 182, 193, 0.1));
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 140, 148, 0.2);
-}
-
-.price-icon {
-  font-size: var(--font-md);
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(255, 140, 148, 0.1);
+  border-radius: 12px;
 }
 
 .price-value {
-  font-size: var(--font-sm);
-  font-weight: var(--font-bold);
-  background: linear-gradient(135deg, #FF8C94, #FF6B7A);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
 }
 
 .buy-btn {
   flex: 1;
-  padding: var(--space-sm) var(--space-md);
+  padding: 8px;
   background: var(--gradient-primary);
-  color: var(--color-text-white);
+  color: white;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-sm);
-  font-weight: var(--font-bold);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all var(--transition-base);
-  box-shadow: var(--btn-shadow);
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(255, 140, 148, 0.3);
 }
 
 .buy-btn:hover:not(:disabled) {
-  transform: translateY(calc(var(--hover-translate-y) / 2)) scale(var(--hover-scale));
-  box-shadow: var(--btn-shadow-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 140, 148, 0.4);
 }
 
 .buy-btn:active:not(:disabled) {
-  transform: translateY(0) scale(1.02);
+  transform: scale(0.95);
 }
 
 .buy-btn:disabled {
-  background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
-  color: #999;
-  cursor: not-allowed;
+  background: #f0f0f0;
+  color: #bbb;
   box-shadow: none;
+  cursor: default;
 }
 
 /* 底部导航 */
-.tab-bar-spacer {
-  height: 20px;
-}
-
+.tab-bar-spacer { height: 20px; }
 .tab-bar-wrapper {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
+  pointer-events: none; /* Let clicks pass through to container */
 }
+.tab-bar-wrapper > * { pointer-events: auto; }
 
 /* ========== 移动端适配 ========== */
 @media (max-width: 480px) {
   .shop-page {
     padding: var(--space-md);
-    padding-bottom: 100px;
+    padding-bottom: 120px;
   }
-
+  
   .page-header {
-    grid-template-columns: auto 1fr;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-lg);
+    margin-bottom: 16px;
+    padding: 8px 16px;
   }
-
-  .header-spacer {
-    display: none;
-  }
-
-  .shop-title {
-    font-size: var(--font-lg);
-    grid-column: 1 / -1;
-    text-align: center;
-    order: -1;
-    margin-bottom: var(--space-sm);
-  }
-
-  .currency-card {
-    padding: var(--space-xs) var(--space-sm);
-  }
-
-  .coin-icon {
-    font-size: var(--font-lg);
-  }
-
-  .coin-amount {
-    font-size: var(--font-md);
-  }
-
-  .category-list {
-    gap: var(--space-xs);
-    padding: var(--space-xs);
-  }
-
-  .category-chip {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: var(--font-xs);
-  }
-
-  .chip-icon {
-    font-size: var(--font-md);
-  }
-
+  
+  .shop-title { font-size: 18px; }
+  .header-spacer { width: 0; display: none; }
+  
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-sm);
+    gap: 12px;
   }
-
-  .shop-item-card {
-    padding: var(--space-sm);
-    border-radius: var(--radius-lg);
-  }
-
-  .item-display {
-    padding: var(--space-sm);
-    margin-bottom: var(--space-sm);
-    border-radius: var(--radius-md);
-  }
-
-  .item-icon-wrapper {
-    width: 60px;
-    height: 60px;
-  }
-
-  .item-emoji {
-    font-size: 40px;
-  }
-
-  .item-name {
-    font-size: var(--font-sm);
-    margin-bottom: var(--space-xs);
-  }
-
-  .item-desc {
-    font-size: var(--font-xs);
-    margin-bottom: var(--space-sm);
-    min-height: 30px;
-    -webkit-line-clamp: 2;
-  }
-
-  .item-action {
-    gap: var(--space-xs);
-  }
-
-  .price-tag {
-    padding: 4px var(--space-xs);
-  }
-
-  .price-icon {
-    font-size: var(--font-sm);
-  }
-
-  .price-value {
-    font-size: var(--font-xs);
-  }
-
-  .buy-btn {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: var(--font-xs);
-  }
+  
+  .shop-item-card { padding: 10px; border-radius: 16px; }
+  .item-display { height: 80px; margin-bottom: 8px; }
+  .item-emoji { font-size: 40px; }
+  .item-name { font-size: 13px; }
+  .item-desc { font-size: 10px; margin-bottom: 8px; }
 }
 </style>

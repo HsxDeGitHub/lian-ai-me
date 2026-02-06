@@ -286,14 +286,14 @@ const sceneStyle = computed(() => {
 
   return {
     indoor: {
-      '--ceiling-bg': indoorBg.ceiling || '#FFF8DC',
-      '--wall-bg': indoorBg.wall || '#FFF5E6',
-      '--floor-bg': indoorBg.floor || '#DEB887'
+      '--ceiling-bg': indoorBg.ceiling || 'var(--color-bg-secondary)',
+      '--wall-bg': indoorBg.wall || 'var(--color-bg-primary)',
+      '--floor-bg': indoorBg.floor || 'var(--color-cute-peach)'
     },
     outdoor: {
-      '--sky-bg': outdoorBg.sky || '#87CEEB',
-      '--grass-bg': outdoorBg.grass || '#90EE90',
-      '--garden-bg': outdoorBg.garden || '#98D8AA'
+      '--sky-bg': outdoorBg.sky || 'var(--color-cute-blue)',
+      '--grass-bg': outdoorBg.grass || 'var(--color-secondary-light)',
+      '--garden-bg': outdoorBg.garden || 'var(--color-secondary)'
     }
   }
 })

@@ -35,17 +35,20 @@
   box-shadow: var(--shadow-glass);
   padding: var(--space-lg);
   border: var(--glass-border);
-  transition: all var(--transition-base);
+  transition: var(--card-transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--glass-heavy-bg);
+  border-color: rgba(255, 255, 255, 0.9);
 }
 
 .card:active {
-  transform: scale(0.98);
+  transform: scale(0.995);
 }
 
 /* 按钮 - 可爱风格 */
@@ -54,16 +57,21 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-full);
-  font-weight: var(--font-semibold);
-  transition: all var(--transition-base);
+  padding: var(--btn-padding-md);
+  border-radius: var(--btn-radius);
+  font-weight: var(--font-bold);
+  /* Bolder */
+  letter-spacing: 0.5px;
+  transition: all var(--transition-bounce);
   cursor: pointer;
   user-select: none;
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 48px;
+  /* High min-height for mobile */
+  min-width: 48px;
   position: relative;
   overflow: hidden;
+  box-shadow: var(--btn-shadow);
+  border: none;
 }
 
 .btn::after {
@@ -73,45 +81,46 @@
   left: 50%;
   width: 0;
   height: 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.4s, height 0.4s;
+  pointer-events: none;
 }
 
 .btn:active::after {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
+  opacity: 0;
+  transition: width 0.4s, height 0.4s, opacity 0.4s;
 }
 
 .btn-primary {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: var(--shadow-lg);
-  filter: brightness(1.1);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--btn-shadow-hover);
+  filter: brightness(1.05);
 }
 
 .btn-primary:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(-1px) scale(0.96);
 }
 
 .btn-secondary {
   background: var(--gradient-secondary);
   color: white;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .btn-secondary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: var(--shadow-lg);
-  filter: brightness(1.1);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(143, 218, 154, 0.4);
+  filter: brightness(1.05);
 }
 
 /* 文本 */

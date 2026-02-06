@@ -35,37 +35,48 @@ const isActive = (path) => {
 </script>
 
 <style scoped>
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .tab-bar {
+    margin-bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
+  }
+}
+
 .tab-bar {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: none;
-  padding: var(--space-sm) 0;
-  padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
-  box-shadow: 0 -4px 20px rgba(255, 182, 193, 0.15);
-  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  background: var(--glass-heavy-bg);
+  backdrop-filter: var(--glass-heavy-backdrop);
+  -webkit-backdrop-filter: var(--glass-heavy-backdrop);
+  border: var(--glass-border);
+  padding: 10px;
+  box-shadow: var(--shadow-glass), var(--shadow-cute);
+  border-radius: var(--radius-full);
+  margin: 0 var(--space-md) var(--space-md);
+  transition: all var(--transition-base);
 }
 
 .tab-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
-  padding: var(--space-xs) var(--space-sm);
+  padding: 8px 12px;
   text-decoration: none;
   color: var(--color-text-secondary);
   transition: all var(--transition-bounce);
   min-width: 0;
   flex: 1;
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
+  height: 100%;
 }
 
 .tab-item:hover {
   color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .tab-item:active {
@@ -73,28 +84,33 @@ const isActive = (path) => {
 }
 
 .tab-item.active {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-sm);
 }
 
 .tab-item.active::before {
+  display: none; /* Remove old indicator */
+}
+
+/* New active dot indicator */
+.tab-item.active::after {
   content: "";
   position: absolute;
-  top: -4px;
+  bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 24px;
+  width: 4px;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--color-primary),
-    var(--color-cute-pink)
-  );
-  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--color-primary);
 }
 
 .tab-icon {
   font-size: 22px;
   transition: transform var(--transition-bounce);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05));
 }
 
 .tab-item:active .tab-icon {
@@ -102,33 +118,23 @@ const isActive = (path) => {
 }
 
 .tab-item.active .tab-icon {
-  transform: scale(1.15);
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 4px 6px rgba(255, 140, 148, 0.4));
 }
 
 .tab-label {
   font-size: 10px;
-  font-weight: var(--font-semibold);
+  font-weight: var(--font-bold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  margin-top: 2px;
+  opacity: 0.8;
 }
 
 .tab-item.active .tab-label {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-cute-pink)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Mobile safe area */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  .tab-bar {
-    padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
-  }
+  color: var(--color-primary-dark);
+  opacity: 1;
 }
 </style>

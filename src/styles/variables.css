@@ -1,66 +1,88 @@
 /* CSS变量定义 - 可爱风格 */
 :root {
-  /* 品牌色 - 温暖明亮的色调 (Premium Macaron Palette - 2024版本) */
-  --color-primary: #FF8C94; /* Soft Pink - 更加温柔 */
-  --color-primary-light: #FFB6C1;
-  --color-primary-dark: #FF6B7A;
+  /* 品牌色 - 温暖明亮的色调 (Premium Macaron Palette - 2024 Ultimate) */
+  --color-primary: #ff8c94;
+  /* Soft Pink - 更加温柔 */
+  --color-primary-light: #ffb6c1;
+  --color-primary-dark: #ff5e6f;
+  /* Deeper for contrast */
+  --color-primary-dim: rgba(255, 140, 148, 0.1);
 
-  --color-secondary: #8FDA9A; /* Soft Green */
-  --color-secondary-light: #B8EBC0;
-  --color-secondary-dark: #6BCB77;
+  --color-secondary: #8fda9a;
+  /* Soft Green */
+  --color-secondary-light: #b8ebc0;
+  --color-secondary-dark: #5cb86b;
 
-  --color-accent: #FFD93D; /* Soft Yellow */
-  --color-accent-light: #FFE577;
-  --color-accent-dark: #F0C425;
+  --color-accent: #ffd93d;
+  /* Soft Yellow */
+  --color-accent-light: #ffe577;
+  --color-accent-dark: #f0c425;
+  --color-accent-pop: #ffaa5a;
+  /* New pop color */
 
   /* 可爱粉色系 (Premium Pinks) */
-  --color-cute-pink: #FFB7CB; /* Baby Pink */
-  --color-cute-pink-light: #FFE0E9;
-  --color-cute-pink-dark: #FF8BA7;
-  --color-cute-peach: #FFDAC1;
-  --color-cute-lavender: #E2D1F9; /* Soft Lavender */
-  --color-cute-mint: #C7F9CC;
-  --color-cute-blue: #A2E1FA; /* Soft Blue */
-  --color-cute-cream: #FFFBF0;
+  --color-cute-pink: #ffb7cb;
+  /* Baby Pink */
+  --color-cute-pink-light: #ffe0e9;
+  --color-cute-pink-dark: #ff8ba7;
+  --color-cute-peach: #ffdac1;
+  --color-cute-lavender: #e2d1f9;
+  /* Soft Lavender */
+  --color-cute-mint: #c7f9cc;
+  --color-cute-blue: #a2e1fa;
+  /* Soft Blue */
+  --color-cute-cream: #fffbf0;
+  --color-cute-white: #ffffff;
 
   /* 文字颜色 (Softer Contrast) */
-  --color-text-primary: #5A4D41; /* Dark Brownish Grey instead of harsh black */
-  --color-text-secondary: #9AA0A6;
-  --color-text-light: #CED4DA;
-  --color-text-white: #FFFFFF;
+  --color-text-primary: #5a4d41;
+  /* Dark Brownish Grey instead of harsh black */
+  --color-text-secondary: #8d9399;
+  /* Slightly warmer gray */
+  --color-text-light: #ced4da;
+  --color-text-white: #ffffff;
+  --color-text-pink: #ff8c94;
 
   /* 背景色 - 现代渐变系统 */
-  --color-bg-primary: #FFF9F5; /* Very warm white */
-  --color-bg-secondary: #FFF0E6;
-  --color-bg-card: rgba(255, 255, 255, 0.9);
-  --color-bg-glass: rgba(255, 255, 255, 0.7);
+  --color-bg-primary: #fff9f5;
+  /* Very warm white */
+  --color-bg-secondary: #fff0e6;
+  --color-bg-tertiary: #fafafa;
+  --color-bg-card: rgba(255, 255, 255, 0.85);
+  /* Slightly more transparent */
+  --color-bg-glass: rgba(255, 255, 255, 0.65);
+  /* More glass-like */
 
-  --color-border: rgba(255, 255, 255, 0.6);
-  --color-border-light: rgba(255, 255, 255, 0.4);
+  --color-border: rgba(255, 255, 255, 0.7);
+  --color-border-light: rgba(255, 255, 255, 0.5);
+  --color-border-strong: rgba(255, 140, 148, 0.3);
 
   /* 渐变 (Premium Gradients - 2024版本) */
-  --gradient-primary: linear-gradient(135deg, #FF8C94 0%, #FFB6C1 100%);
-  --gradient-secondary: linear-gradient(135deg, #8FDA9A 0%, #6BCB77 100%);
-  --gradient-pink: linear-gradient(135deg, #FFB7CB 0%, #FF8BA7 100%);
-  --gradient-rainbow: linear-gradient(90deg, #FF8C94, #B8EBC0, #E2D1F9, #A2E1FA);
-  --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-  --gradient-modern-bg: linear-gradient(180deg, #ffe4ec 0%, #e8f4fd 50%, #d4f1f9 100%);
+  --gradient-primary: linear-gradient(135deg, #ff8c94 0%, #ffb6c1 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #ffb6c1 0%, #ffe0e9 100%);
+  --gradient-secondary: linear-gradient(135deg, #8fda9a 0%, #6bcb77 100%);
+  --gradient-pink: linear-gradient(135deg, #ffb7cb 0%, #ff8ba7 100%);
+  --gradient-rainbow: linear-gradient(90deg, #ff8c94, #b8ebc0, #e2d1f9, #a2e1fa);
+  --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+  --gradient-modern-bg: linear-gradient(180deg, #fff0f3 0%, #f0f7ff 50%, #effaf5 100%);
+  /* Subtle pastel trip */
+  --gradient-card-shine: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.4) 25%, transparent 30%);
 
   /* 心情颜色 */
-  --mood-happy: #FAD02E;
-  --mood-excited: #FF6B6B;
-  --mood-calm: #4ECDC4;
-  --mood-sad: #45B7D1;
-  --mood-bored: #95A5A6;
-  --mood-sleepy: #9B59B6;
-  --mood-proud: #F39C12;
-  --mood-grateful: #FF85A2;
+  --mood-happy: #fad02e;
+  --mood-excited: #ff6b6b;
+  --mood-calm: #4ecdc4;
+  --mood-sad: #45b7d1;
+  --mood-bored: #95a5a6;
+  --mood-sleepy: #9b59b6;
+  --mood-proud: #f39c12;
+  --mood-grateful: #ff85a2;
 
   /* 品质颜色 */
-  --quality-common: #BDC3C7;
-  --quality-rare: #3498DB;
-  --quality-epic: #9B59B6;
-  --quality-legendary: #F1C40F;
+  --quality-common: #bdc3c7;
+  --quality-rare: #3498db;
+  --quality-epic: #9b59b6;
+  --quality-legendary: #f1c40f;
 
   /* 间距系统 */
   --space-xs: 4px;
@@ -109,14 +131,18 @@
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-  --shadow-cute: 0 8px 30px rgba(255, 182, 193, 0.25);
-  --shadow-glow: 0 0 25px rgba(255, 217, 61, 0.5);
-  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --shadow-cute: 0 8px 30px rgba(255, 140, 148, 0.2);
+  /* Pinker shadow */
+  --shadow-glow: 0 0 25px rgba(255, 217, 61, 0.6);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 
   /* 玻璃态 - 增强2024版本 */
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-border: 1.5px solid rgba(255, 255, 255, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.8);
   --glass-backdrop: blur(20px) saturate(180%);
+  --glass-heavy-bg: rgba(255, 255, 255, 0.85);
+  --glass-heavy-backdrop: blur(30px) saturate(200%);
 
   /* 过渡 - 弹性缓动 */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,14 +155,15 @@
   --hover-scale: 1.02;
 
   /* 按钮变量 */
-  --btn-padding-sm: var(--space-sm) var(--space-md);
-  --btn-padding-md: var(--space-md) var(--space-lg);
-  --btn-shadow: 0 3px 10px rgba(255, 140, 148, 0.35);
-  --btn-shadow-hover: 0 6px 16px rgba(255, 140, 148, 0.45);
+  --btn-padding-sm: 6px 16px;
+  --btn-padding-md: 10px 24px;
+  --btn-radius: var(--radius-full);
+  --btn-shadow: 0 4px 12px rgba(255, 140, 148, 0.3);
+  --btn-shadow-hover: 0 8px 20px rgba(255, 140, 148, 0.4);
 
   /* 卡片变量 */
-  --card-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --card-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.15);
+  --card-transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  --card-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.08);
 
   /* Z-index层级 */
   --z-dropdown: 100;
